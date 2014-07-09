@@ -1,6 +1,10 @@
 package com.kpj.thunderplay.gui;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
+	private static final long serialVersionUID = 42L;
+	
 	private long id;
 	private String title;
 	private String artist;

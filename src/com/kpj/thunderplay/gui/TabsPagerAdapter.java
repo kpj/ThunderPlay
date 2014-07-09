@@ -3,6 +3,7 @@ package com.kpj.thunderplay.gui;
 import java.util.ArrayList;
 
 import com.kpj.thunderplay.ContentHandler;
+import com.kpj.thunderplay.fs.FileHandler;
 import com.kpj.thunderplay.music.MusicHandler;
 
 import android.app.Fragment;
@@ -18,7 +19,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		
 		ctx = c;
 		
-		ContentHandler.queueFragment = new PlayQueue(new ArrayList<Song>());
+		ArrayList<Song> tmp = (ArrayList<Song>) FileHandler.readObject(ctx, ContentHandler.queue_filename);
+		ContentHandler.queueFragment = new PlayQueue((tmp!=null)?tmp:new ArrayList<Song>());
 		ContentHandler.allsongsFragment = new SongList(MusicHandler.getSongList(ctx));
 	}
 

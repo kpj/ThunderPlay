@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.kpj.thunderplay.fs.FileHandler;
 import com.kpj.thunderplay.gui.TabsPagerAdapter;
 import com.kpj.thunderplay.music.MusicPlayer;
 import com.kpj.thunderplay.music.MusicService;
@@ -81,7 +82,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	public void playqueue_onclick(View view) {
 		mplayer.musicSrv.setList(ContentHandler.queueFragment.getSongs());
-		
+
 		mplayer.musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
 		mplayer.musicSrv.playSong();
 
@@ -184,6 +185,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onDestroy() {
 		stopService(mplayer.playIntent);
 		mplayer.musicSrv = null;
+
+		FileHandler.writeObject(
+				ctx,
+				ContentHandler.queue_filename,
+				ContentHandler.queueFragment.getSongs()
+		);
 
 		super.onDestroy();
 	}
