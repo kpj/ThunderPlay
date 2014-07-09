@@ -1,4 +1,4 @@
-package com.kpj.thunderplay;
+package com.kpj.thunderplay.gui;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.kpj.thunderplay.R;
 
 public class SongAdapter extends BaseAdapter {
 

@@ -1,4 +1,4 @@
-package com.kpj.thunderplay;
+package com.kpj.thunderplay.music;
 
 import android.content.Context;
 import android.widget.MediaController;

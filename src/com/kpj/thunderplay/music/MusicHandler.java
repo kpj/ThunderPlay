@@ -1,8 +1,10 @@
-package com.kpj.thunderplay;
+package com.kpj.thunderplay.music;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import com.kpj.thunderplay.gui.Song;
 
 import android.content.ContentResolver;
 import android.content.Context;

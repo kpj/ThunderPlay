@@ -11,12 +11,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.kpj.thunderplay.MusicService.MusicBinder;
+import com.kpj.thunderplay.gui.TabsPagerAdapter;
+import com.kpj.thunderplay.music.MusicPlayer;
+import com.kpj.thunderplay.music.MusicService;
+import com.kpj.thunderplay.music.MusicService.MusicBinder;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	private Context ctx = this;

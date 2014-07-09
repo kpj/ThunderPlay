@@ -1,6 +1,9 @@
-package com.kpj.thunderplay;
+package com.kpj.thunderplay.gui;
 
 import java.util.ArrayList;
+
+import com.kpj.thunderplay.ContentHandler;
+import com.kpj.thunderplay.music.MusicHandler;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

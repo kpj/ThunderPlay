@@ -1,4 +1,4 @@
-package com.kpj.thunderplay;
+package com.kpj.thunderplay.gui;
 
 public class Song {
 	private long id;

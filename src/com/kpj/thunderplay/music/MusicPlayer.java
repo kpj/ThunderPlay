@@ -1,4 +1,4 @@
-package com.kpj.thunderplay;
+package com.kpj.thunderplay.music;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;

@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.kpj.thunderplay.MusicService" />
+        <service android:name="com.kpj.thunderplay.music.MusicService" />
     </application>
 
 </manifest>

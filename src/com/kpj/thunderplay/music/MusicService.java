@@ -1,4 +1,4 @@
-package com.kpj.thunderplay;
+package com.kpj.thunderplay.music;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,6 +12,12 @@ import android.os.Binder;
 import android.os.PowerManager;
 import android.util.Log;
 import java.util.Random;
+
+import com.kpj.thunderplay.MainActivity;
+import com.kpj.thunderplay.R;
+import com.kpj.thunderplay.R.drawable;
+import com.kpj.thunderplay.gui.Song;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 
@@ -55,7 +61,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	}
 
 	public class MusicBinder extends Binder {
-		MusicService getService() {
+		public MusicService getService() {
 			return MusicService.this;
 		}
 	}
