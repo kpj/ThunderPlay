@@ -135,7 +135,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			ContentHandler.queueFragment.clear();
 			mplayer.musicSrv.setList(ContentHandler.queueFragment.getSongs());
 			mplayer.pause();
-			mplayer.controller.hide();
+			mplayer.controller.myHide();
 			return true;
 		case R.id.toggle_shuffle:
 			mplayer.musicSrv.toggleShuffle();
