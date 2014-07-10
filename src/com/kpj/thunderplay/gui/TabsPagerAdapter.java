@@ -19,8 +19,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		
 		ctx = c;
 		
+		// load old list if it was created
 		ArrayList<Song> tmp = (ArrayList<Song>) FileHandler.readObject(ctx, ContentHandler.queue_filename);
-		ContentHandler.queueFragment = new PlayQueue((tmp!=null)?tmp:new ArrayList<Song>());
+		ContentHandler.queue = (tmp!=null)?tmp:new ArrayList<Song>();
+		
+		ContentHandler.queueFragment = new PlayQueue();
 		ContentHandler.allsongsFragment = new SongList(MusicHandler.getSongList(ctx));
 	}
 

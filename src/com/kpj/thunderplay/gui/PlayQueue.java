@@ -1,51 +1,52 @@
 package com.kpj.thunderplay.gui;
 
-import java.util.ArrayList;
-
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ListView;
 
+import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
 
 public class PlayQueue extends Fragment {
-	private ArrayList<Song> songList;
 	private SongAdapter songAdt;
 
-	public PlayQueue(ArrayList<Song> sl) {
-		for(Song s : sl) {
-			Log.d("SONG", s.getTitle());
-		}
-
-		songList = sl;
-	}
+	public PlayQueue() {}
 
 	public void addSong(Song s) {
-		songList.add(s);		
+		ContentHandler.queue.add(s);		
 		songAdt.notifyDataSetChanged();
 	}
 	public void rmSongAt(int pos) {
-		songList.remove(pos);
+		ContentHandler.queue.remove(pos);
 		songAdt.notifyDataSetChanged();
 	}
 	public Song getSongAt(int pos) {
-		return songList.get(pos);
+		return ContentHandler.queue.get(pos);
 	}
-	public ArrayList<Song> getSongs() {
-		return songList;
+	public void moveSong(int curPos, int dist) {
+		int newPos = curPos + dist;
+		if(newPos < 0) newPos = ContentHandler.queue.size() - 1;
+		if(newPos >= ContentHandler.queue.size()) newPos = 0;
+		
+		Song tmp = ContentHandler.queue.get(curPos);
+		ContentHandler.queue.remove(curPos);
+		ContentHandler.queue.add(newPos, tmp);
+		
+		ContentHandler.songPosition += dist;
+		
+		songAdt.notifyDataSetChanged();
 	}
 
 	public void clear() {
-		songList.clear();
+		ContentHandler.queue.clear();
 		songAdt.notifyDataSetChanged();
 	}
 
@@ -53,7 +54,7 @@ public class PlayQueue extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ListView rootView = (ListView) inflater.inflate(R.layout.song_list, container, false);		
 
-		songAdt = new SongAdapter(inflater, songList, R.layout.song_playqueue);
+		songAdt = new SongAdapter(inflater, ContentHandler.queue, R.layout.song_playqueue);
 		rootView.setAdapter(songAdt);
 
 		registerForContextMenu(rootView);
@@ -64,7 +65,10 @@ public class PlayQueue extends Fragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {  
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.add(Menu.NONE, R.id.context_menu_delete_item, Menu.NONE, "Delete");
+		
+		menu.add(Menu.NONE, R.id.cm_delete_item, Menu.NONE, "Delete");
+		menu.add(Menu.NONE, R.id.cm_move_up, Menu.NONE, "Move Up");
+		menu.add(Menu.NONE, R.id.cm_move_down, Menu.NONE, "Move Down");
 	}
 
 	@Override
@@ -73,8 +77,14 @@ public class PlayQueue extends Fragment {
 		int pos = info.position;
 
 		switch(item.getItemId()) {
-		case R.id.context_menu_delete_item:
+		case R.id.cm_delete_item:
 			rmSongAt(pos);
+			break;
+		case R.id.cm_move_up:
+			moveSong(pos, -1);
+			break;
+		case R.id.cm_move_down:
+			moveSong(pos, 1);
 			break;
 		}
 		return super.onContextItemSelected(item);

@@ -1,6 +1,5 @@
 package com.kpj.thunderplay.music;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import android.app.Notification;
@@ -16,6 +15,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.MainActivity;
 import com.kpj.thunderplay.R;
 import com.kpj.thunderplay.gui.Song;
@@ -24,8 +24,6 @@ import com.kpj.thunderplay.gui.Song;
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener  {
 
 	private MediaPlayer player;
-	private ArrayList<Song> songs;
-	private int songPos;
 
 	private final IBinder musicBind = new MusicBinder();
 
@@ -39,7 +37,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	public void onCreate(){
 		super.onCreate();
 
-		songPos = 0;
+		ContentHandler.songPosition = 0;
 		player = new MediaPlayer();
 		rand = new Random();
 
@@ -55,10 +53,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		player.setOnErrorListener(this);
 	}
 
-	public void setList(ArrayList<Song> theSongs){
-		songs = theSongs;
-	}
-
 	public class MusicBinder extends Binder {
 		public MusicService getService() {
 			return MusicService.this;
@@ -68,7 +62,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	public void playSong(){
 		player.reset();
 
-		Song playSong = songs.get(songPos);
+		Song playSong = ContentHandler.queue.get(ContentHandler.songPosition);
 
 		long currSong = playSong.getId();
 		songTitle = playSong.getTitle();
@@ -89,7 +83,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	}
 
 	public void setSong(int songIndex){
-		songPos = songIndex;
+		ContentHandler.songPosition = songIndex;
 	}
 
 	public int getPos(){
@@ -117,27 +111,27 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	}
 
 	public void playPrev(){
-		if(songs.size() == 0) return;
+		if(ContentHandler.queue.size() == 0) return;
 		
-		songPos--;
-		if(songPos < 0) songPos = songs.size()-1;
+		ContentHandler.songPosition--;
+		if(ContentHandler.songPosition < 0) ContentHandler.songPosition = ContentHandler.queue.size()-1;
 
 		playSong();
 	}
 
 	public void playNext(){
-		if(songs.size() == 0) return;
+		if(ContentHandler.queue.size() == 0) return;
 		
 		if(shuffle){
-			int newSong = songPos;
+			int newSong = ContentHandler.songPosition;
 
-			while(newSong == songPos){
-				newSong = rand.nextInt(songs.size());
+			while(newSong == ContentHandler.songPosition){
+				newSong = rand.nextInt(ContentHandler.queue.size());
 			}
-			songPos = newSong;
+			ContentHandler.songPosition = newSong;
 		} else {
-			songPos++;
-			if(songPos >= songs.size()) songPos = 0;
+			ContentHandler.songPosition++;
+			if(ContentHandler.songPosition >= ContentHandler.queue.size()) ContentHandler.songPosition = 0;
 		}
 		playSong();
 	}

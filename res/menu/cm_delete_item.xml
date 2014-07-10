@@ -3,9 +3,9 @@
     tools:context="com.kpj.thunderplay.MainActivity" >
 
     <item
-        android:id="@+id/context_menu_delete_item"
+        android:id="@+id/cm_delete_item"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/context_menu_delete_item" />
+        android:title="@string/cm_delete_item" />
 
 </menu>

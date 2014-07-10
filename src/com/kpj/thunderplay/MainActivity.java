@@ -83,8 +83,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 	public void playqueue_onclick(View view) {
-		mplayer.musicSrv.setList(ContentHandler.queueFragment.getSongs());
-
 		mplayer.musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
 		mplayer.musicSrv.playSong();
 
@@ -135,7 +133,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		switch(id) {
 		case R.id.clear_queue:
 			ContentHandler.queueFragment.clear();
-			mplayer.musicSrv.setList(ContentHandler.queueFragment.getSongs());
 			mplayer.pause();
 			mplayer.controller.myHide();
 			return true;
@@ -191,7 +188,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		FileHandler.writeObject(
 				ctx,
 				ContentHandler.queue_filename,
-				ContentHandler.queueFragment.getSongs()
+				ContentHandler.queue
 				);
 
 		super.onDestroy();
