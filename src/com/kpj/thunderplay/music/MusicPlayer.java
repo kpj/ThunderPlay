@@ -71,12 +71,12 @@ public class MusicPlayer implements MediaPlayerControl {
 
 	@Override
 	public boolean canSeekBackward() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean canSeekForward() {
-		return true;
+		return false;
 	}
 
 	@Override
