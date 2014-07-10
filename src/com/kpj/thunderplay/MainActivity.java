@@ -43,11 +43,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		viewPager = (ViewPager) findViewById(R.id.activity_main);
 		actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(this, getFragmentManager());
+		
+		registerForContextMenu(findViewById(R.id.activity_main));
 
 		viewPager.setAdapter(mAdapter);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
-
+		
 		for (String tab_name : tabs) {
 			Tab cur = actionBar.newTab().setText(tab_name).setTabListener(this);
 			//cur.setTag(tab_name.toString().toLowerCase(Locale.getDefault()).replaceAll(" ", "_"));
@@ -190,7 +192,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				ctx,
 				ContentHandler.queue_filename,
 				ContentHandler.queueFragment.getSongs()
-		);
+				);
 
 		super.onDestroy();
 	}

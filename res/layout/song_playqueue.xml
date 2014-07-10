@@ -5,7 +5,8 @@
   android:onClick="playqueue_onclick"
   android:orientation="vertical"
   android:padding="5dp"
-  android:background="@drawable/list_selector" >
+  android:background="@drawable/list_selector"
+  android:longClickable="true" >
  
   <TextView
     android:id="@+id/song_title"

@@ -8,5 +8,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="clear_queue">Clear Queue</string>
     <string name="toggle_shuffle">Toggle Shuffle</string>
+    <string name="context_menu_delete_item">Delete</string>
 
 </resources>
