@@ -31,6 +31,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ActionBar actionBar;
 
 	private String[] tabs = { "All Songs", "Queue" };
+	
+	private boolean isActivityInForeground = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			mplayer.playbackPaused = false;
 		}
 
-		mplayer.controller.show(0);
+		if(isActivityInForeground) {
+			mplayer.controller.show(0);
+		}
 	}
 
 	@Override
@@ -172,12 +176,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			mplayer.setController();
 			mplayer.paused = false;
 		}
+		
+		isActivityInForeground = true;
 	}
 
 	@Override
 	protected void onStop() {
-		mplayer.controller.hide();
 		super.onStop();
+		
+		mplayer.controller.hide();
+		isActivityInForeground = false;
 	}
 
 	@Override
