@@ -21,12 +21,9 @@ public class MusicHandler {
 		Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
 
 		if(musicCursor!=null && musicCursor.moveToFirst()){
-			int titleColumn = musicCursor.getColumnIndex
-					(android.provider.MediaStore.Audio.Media.TITLE);
-			int idColumn = musicCursor.getColumnIndex
-					(android.provider.MediaStore.Audio.Media._ID);
-			int artistColumn = musicCursor.getColumnIndex
-					(android.provider.MediaStore.Audio.Media.ARTIST);
+			int titleColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
+			int idColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
+			int artistColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.ARTIST);
 
 			do {
 				long thisId = musicCursor.getLong(idColumn);

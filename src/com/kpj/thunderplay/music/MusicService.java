@@ -133,6 +133,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 			ContentHandler.songPosition++;
 			if(ContentHandler.songPosition >= ContentHandler.queue.size()) ContentHandler.songPosition = 0;
 		}
+		
 		playSong();
 	}
 

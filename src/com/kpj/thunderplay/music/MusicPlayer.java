@@ -99,7 +99,7 @@ public class MusicPlayer implements MediaPlayerControl {
 
 	@Override
 	public int getDuration() {
-		if(musicSrv!=null && musicBound && musicSrv.isPlaying())
+		if(musicSrv != null && musicBound && musicSrv.isPlaying())
 			return musicSrv.getDur();
 		else 
 			return 0;
@@ -107,7 +107,7 @@ public class MusicPlayer implements MediaPlayerControl {
 
 	@Override
 	public boolean isPlaying() {
-		if(musicSrv!=null && musicBound)
+		if(musicSrv != null && musicBound)
 			return musicSrv.isPlaying();
 		return false;
 	}
