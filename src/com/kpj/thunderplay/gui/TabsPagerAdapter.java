@@ -2,14 +2,14 @@ package com.kpj.thunderplay.gui;
 
 import java.util.ArrayList;
 
-import com.kpj.thunderplay.ContentHandler;
-import com.kpj.thunderplay.fs.FileHandler;
-import com.kpj.thunderplay.music.MusicHandler;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v13.app.FragmentPagerAdapter;
+
+import com.kpj.thunderplay.ContentHandler;
+import com.kpj.thunderplay.fs.FileHandler;
+import com.kpj.thunderplay.music.MusicHandler;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 	Context ctx;
@@ -23,8 +23,12 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		ArrayList<Song> tmp = (ArrayList<Song>) FileHandler.readObject(ctx, ContentHandler.queue_filename);
 		ContentHandler.queue = (tmp!=null)?tmp:new ArrayList<Song>();
 		
+		// load playlists
+		ContentHandler.playlists = FileHandler.getPlaylistNames(ctx);
+		
 		ContentHandler.queueFragment = new PlayQueue();
 		ContentHandler.allsongsFragment = new SongList(MusicHandler.getSongList(ctx));
+		ContentHandler.playlistFragment = new PlaylistList();
 	}
 
 	@Override
@@ -36,6 +40,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 			return ContentHandler.allsongsFragment;
 		case 1:
 			return ContentHandler.queueFragment;
+		case 2:
+			return ContentHandler.playlistFragment;
 		}
 
 		return null;
@@ -43,7 +49,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		return 2;
+		return 3;
 	}
 
 }

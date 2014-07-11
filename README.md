@@ -14,3 +14,6 @@ Install `ThunderPlay.apk` from the `dist` directory.
 * `QUEUE` tab 
     * Click in order to play your songs. 
     * Hold longer to open a context menu.
+* `PLAYLISTS` tab
+    * Click in order to replace current queue with playlist.
+    * Hold longer to open a context menu.

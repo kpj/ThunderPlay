@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.kpj.thunderplay.fs.FileHandler;
+import com.kpj.thunderplay.gui.DialogHandler;
+import com.kpj.thunderplay.gui.Song;
 import com.kpj.thunderplay.gui.TabsPagerAdapter;
 import com.kpj.thunderplay.music.MusicPlayer;
 import com.kpj.thunderplay.music.MusicService;
@@ -30,7 +33,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
 
-	private String[] tabs = { "All Songs", "Queue" };
+	private String[] tabs = { "All Songs", "Queue", "Playlists" };
 	
 	private boolean isActivityInForeground = false;
 
@@ -39,6 +42,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		ContentHandler.ctx = this;
+		
 		mplayer = new MusicPlayer(this);
 
 		// tabbed view
@@ -97,6 +102,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			mplayer.controller.show(0);
 		}
 	}
+	
+	public void playlistlist_onclick(View view) {
+		int ind = Integer.parseInt(view.getTag().toString());
+				
+		String plname = ContentHandler.playlists.get(ind);
+		//ContentHandler.queue = FileHandler.readPlaylist(ctx, plname);
+		//ContentHandler.queueFragment.update();
+		// why does the above not work?
+		
+		ContentHandler.queueFragment.clear();
+		for(Song s : FileHandler.readPlaylist(ctx, plname)) {
+			ContentHandler.queueFragment.addSong(s);
+		}
+	}
 
 	@Override
 	protected void onStart() {
@@ -127,6 +146,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.toggle_shuffle, menu);
+		getMenuInflater().inflate(R.menu.save_queue, menu);
 		getMenuInflater().inflate(R.menu.clear_queue, menu);
 		return true;
 	}
@@ -143,6 +163,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		case R.id.toggle_shuffle:
 			mplayer.musicSrv.toggleShuffle();
 			item.setChecked(!item.isChecked());
+			return true;
+		case R.id.save_queue:
+			DialogHandler.saveQueue(ctx);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

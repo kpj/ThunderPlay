@@ -44,6 +44,9 @@ public class PlayQueue extends Fragment {
 		
 		songAdt.notifyDataSetChanged();
 	}
+	public void update() {
+		songAdt.notifyDataSetChanged();
+	}
 
 	public void clear() {
 		ContentHandler.queue.clear();
@@ -87,6 +90,7 @@ public class PlayQueue extends Fragment {
 			moveSong(pos, 1);
 			break;
 		}
+		
 		return super.onContextItemSelected(item);
 	}
 }
