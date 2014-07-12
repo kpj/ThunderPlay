@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.kpj.thunderplay.fs.FileHandler;
 import com.kpj.thunderplay.gui.DialogHandler;
@@ -34,7 +35,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ActionBar actionBar;
 
 	private String[] tabs = { "All Songs", "Queue", "Playlists" };
-	
+
 	private boolean isActivityInForeground = false;
 
 	@Override
@@ -43,20 +44,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		setContentView(R.layout.activity_main);
 
 		ContentHandler.ctx = this;
-		
+
 		mplayer = new MusicPlayer(this);
 
 		// tabbed view
 		viewPager = (ViewPager) findViewById(R.id.activity_main);
 		actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(this, getFragmentManager());
-		
+
 		registerForContextMenu(findViewById(R.id.activity_main));
 
 		viewPager.setAdapter(mAdapter);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
-		
+
 		for (String tab_name : tabs) {
 			Tab cur = actionBar.newTab().setText(tab_name).setTabListener(this);
 			//cur.setTag(tab_name.toString().toLowerCase(Locale.getDefault()).replaceAll(" ", "_"));
@@ -102,15 +103,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			mplayer.controller.show(0);
 		}
 	}
-	
+
 	public void playlistlist_onclick(View view) {
 		int ind = Integer.parseInt(view.getTag().toString());
-				
+
 		String plname = ContentHandler.playlists.get(ind);
 		//ContentHandler.queue = FileHandler.readPlaylist(ctx, plname);
 		//ContentHandler.queueFragment.update();
 		// why does the above not work?
-		
+
 		ContentHandler.queueFragment.clear();
 		for(Song s : FileHandler.readPlaylist(ctx, plname)) {
 			ContentHandler.queueFragment.addSong(s);
@@ -199,28 +200,28 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			mplayer.setController();
 			mplayer.paused = false;
 		}
-		
+
 		isActivityInForeground = true;
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
+
 		mplayer.controller.hide();
 		isActivityInForeground = false;
+
+		FileHandler.writeObject(
+			ctx,
+			ContentHandler.queue_filename,
+			ContentHandler.queue
+		);
 	}
 
 	@Override
 	protected void onDestroy() {
 		stopService(mplayer.playIntent);
 		mplayer.musicSrv = null;
-
-		FileHandler.writeObject(
-				ctx,
-				ContentHandler.queue_filename,
-				ContentHandler.queue
-				);
 
 		super.onDestroy();
 	}
