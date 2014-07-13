@@ -79,10 +79,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
 	public void toggleShuffle() {
 		shuffle = !shuffle;
+		resetAlreadyPlayed();
 	}
 
 	public void setSong(int songIndex) {
 		ContentHandler.songPosition = songIndex;
+		resetAlreadyPlayed();
 	}
 
 	public int getPos() {
@@ -122,18 +124,36 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		if(ContentHandler.queue.size() == 0) return;
 
 		if(shuffle) {
-			int newSong = ContentHandler.songPosition;
+			if(ContentHandler.queue.size() == ContentHandler.alreadyPlayed.size())
+				resetAlreadyPlayed();
 
-			while(newSong == ContentHandler.songPosition) {
+			if(ContentHandler.queue.size() == 1)
+				ContentHandler.alreadyPlayed.clear();
+			
+			int newSong = ContentHandler.songPosition;
+			Song cur = null;
+			if(newSong != -1)
+				cur = ContentHandler.queue.get(newSong);
+
+			while(ContentHandler.alreadyPlayed.contains(cur)) {
 				newSong = rand.nextInt(ContentHandler.queue.size());
+				cur = ContentHandler.queue.get(newSong);
 			}
+
 			ContentHandler.songPosition = newSong;
+			ContentHandler.alreadyPlayed.add(cur);
 		} else {
 			ContentHandler.songPosition++;
 			if(ContentHandler.songPosition >= ContentHandler.queue.size()) ContentHandler.songPosition = 0;
 		}
 
 		playSong();
+	}
+
+	private void resetAlreadyPlayed() {
+		ContentHandler.alreadyPlayed.clear();
+		if(ContentHandler.songPosition != -1)
+			ContentHandler.alreadyPlayed.add(ContentHandler.queue.get(ContentHandler.songPosition));
 	}
 
 	/*

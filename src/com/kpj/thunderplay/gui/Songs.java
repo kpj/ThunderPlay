@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
+import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
 import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.gui.adapter.SonglistAdapter;
@@ -30,6 +31,7 @@ public abstract class Songs extends Fragment {
 	}
 	
 	public void rmSongAt(int pos) {
+		ContentHandler.alreadyPlayed.remove(elements.get(pos));
 		elements.remove(pos);
 		update();
 	}

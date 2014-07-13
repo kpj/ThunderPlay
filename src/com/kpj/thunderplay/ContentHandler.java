@@ -21,6 +21,7 @@ public class ContentHandler {
 	public final static String queue_filename = "queue.txt";
 	
 	public static ArrayList<Song> queue = new ArrayList<Song>();
+	public static ArrayList<Song> alreadyPlayed = new ArrayList<Song>();
 	public static int songPosition = -1;
 	
 	public static ArrayList<String> playlists = new ArrayList<String>();
