@@ -1,5 +1,7 @@
 package com.kpj.thunderplay.music;
 
+import com.kpj.thunderplay.ContentHandler;
+
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -9,21 +11,17 @@ import android.widget.MediaController.MediaPlayerControl;
 public class MusicPlayer implements MediaPlayerControl {
 	public MusicService musicSrv;
 	public Intent playIntent;
-	public boolean musicBound = false;
 
-	public boolean paused = false, playbackPaused = false;
+	public boolean musicBound = false;
+	public boolean playbackPaused = false;
 
 	public MusicController controller;
 
-	private FragmentActivity ctx;
-
-
-	public MusicPlayer(FragmentActivity c) {
-		ctx = c;
-	}
-
-	public void setController(){
-		controller = new MusicController(ctx);
+	/*
+	 * Setup music control panel
+	 */
+	public void enableController() {
+		controller = new MusicController(ContentHandler.ctx);
 
 		controller.setPrevNextListeners(new View.OnClickListener() {
 			@Override
@@ -38,32 +36,47 @@ public class MusicPlayer implements MediaPlayerControl {
 		});
 
 		controller.setMediaPlayer(this);
-		controller.setAnchorView(ctx.findViewById(android.R.id.content));
+		controller.setAnchorView(((FragmentActivity) ContentHandler.ctx).findViewById(android.R.id.content));
 		controller.setEnabled(true);
 	}
 
-	private void playNext(){
+	/*
+	 * Control playback
+	 */
+	public void startPlayback() {
+		musicSrv.playSong();
+
+		if(playbackPaused) {
+			enableController();
+			playbackPaused = false;
+		}
+	}
+
+	private void playNext() {
 		musicSrv.playNext();
 
 		if(playbackPaused) {
-			setController();
+			enableController();
 			playbackPaused = false;
 		}
 
 		controller.show(0);
 	}
 
-	private void playPrev(){
+	private void playPrev() {
 		musicSrv.playPrev();
 
 		if(playbackPaused) {
-			setController();
+			enableController();
 			playbackPaused = false;
 		}
 
 		controller.show(0);
 	}
 
+	/*
+	 * Overridden functions of MediaPlayerControl
+	 */
 	@Override
 	public boolean canPause() {
 		return true;
@@ -125,6 +138,6 @@ public class MusicPlayer implements MediaPlayerControl {
 
 	@Override
 	public void start() {
-		musicSrv.go();
+		musicSrv.start();
 	}
 }

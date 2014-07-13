@@ -7,10 +7,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import com.kpj.thunderplay.gui.Song;
-
 import android.content.Context;
-import android.util.Log;
+
+import com.kpj.thunderplay.data.Song;
 
 public class FileHandler {
 	private final static String playlistDir = "playlists"; 
@@ -22,6 +21,23 @@ public class FileHandler {
 
 		try {
 			fos = ctx.openFileOutput(filename, Context.MODE_PRIVATE);
+			oos = new ObjectOutputStream(fos);
+
+			oos.writeObject(obj);
+			
+			oos.close();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void writeObject(Context ctx, File file, Object obj) {
+		FileOutputStream fos;
+		ObjectOutputStream oos;
+
+		try {
+			fos = new FileOutputStream(file);
 			oos = new ObjectOutputStream(fos);
 
 			oos.writeObject(obj);
@@ -54,47 +70,7 @@ public class FileHandler {
 		return obj;
 	}
 	
-	public static void savePlaylist(Context ctx, String name, ArrayList<Song> playlist) {
-		File dir = new File(ctx.getFilesDir(), playlistDir);
-		dir.mkdirs();
-		
-		File fd = new File(dir, name);
-		FileHandler.writeFile(ctx, fd, playlist);
-	}
-	
-	public static ArrayList<Song> readPlaylist(Context ctx, String name) {
-		File dir = new File(ctx.getFilesDir(), playlistDir);
-		File fd = new File(dir, name);
-		
-		return (ArrayList<Song>) FileHandler.readFile(ctx, fd);
-	}
-	
-	public static void writeFile(Context ctx, File file, Object obj) {
-		FileOutputStream fos;
-		ObjectOutputStream oos;
-
-		try {
-			fos = new FileOutputStream(file);
-			oos = new ObjectOutputStream(fos);
-
-			oos.writeObject(obj);
-			
-			oos.close();
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void deletePlaylist(Context ctx, String name) {
-		File dir = new File(ctx.getFilesDir(), playlistDir);
-		dir.mkdirs();
-		
-		File fd = new File(dir, name);
-		fd.delete();
-	}
-	
-	public static Object readFile(Context ctx, File file) {
+	public static Object readObject(Context ctx, File file) {
 		Object obj = null;
 
 		FileInputStream fis;
@@ -113,6 +89,30 @@ public class FileHandler {
 		}
 
 		return obj;
+	}
+	
+	public static void savePlaylist(Context ctx, String name, ArrayList<Song> playlist) {
+		File dir = new File(ctx.getFilesDir(), playlistDir);
+		dir.mkdirs();
+		
+		File fd = new File(dir, name);
+		FileHandler.writeObject(ctx, fd, playlist);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Song> readPlaylist(Context ctx, String name) {
+		File dir = new File(ctx.getFilesDir(), playlistDir);
+		File fd = new File(dir, name);
+		
+		return (ArrayList<Song>) FileHandler.readObject(ctx, fd);
+	}
+	
+	public static void deletePlaylist(Context ctx, String name) {
+		File dir = new File(ctx.getFilesDir(), playlistDir);
+		dir.mkdirs();
+		
+		File fd = new File(dir, name);
+		fd.delete();
 	}
 	
 	public static ArrayList<String> getPlaylistNames(Context ctx) {

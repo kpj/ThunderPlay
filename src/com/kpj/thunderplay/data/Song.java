@@ -1,4 +1,4 @@
-package com.kpj.thunderplay.gui;
+package com.kpj.thunderplay.data;
 
 import java.io.Serializable;
 

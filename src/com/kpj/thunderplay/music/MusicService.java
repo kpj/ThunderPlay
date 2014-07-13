@@ -18,33 +18,32 @@ import android.util.Log;
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.MainActivity;
 import com.kpj.thunderplay.R;
-import com.kpj.thunderplay.gui.Song;
+import com.kpj.thunderplay.data.Song;
 
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener  {
-
 	private MediaPlayer player;
 
 	private final IBinder musicBind = new MusicBinder();
 
-	private String songTitle = "";
+	private String currentSongTitle = "";
 	private static final int NOTIFY_ID = 1;
 
 	private boolean shuffle = false;
 	private Random rand;
 
-
-	public void onCreate(){
+	public void onCreate() {
 		super.onCreate();
 
 		ContentHandler.songPosition = 0;
+
 		player = new MediaPlayer();
 		rand = new Random();
 
 		initMusicPlayer();
 	}
 
-	public void initMusicPlayer(){
+	public void initMusicPlayer() {
 		player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
 		player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -59,73 +58,73 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		}
 	}
 
-	public void playSong(){
+	public void playSong() {
 		player.reset();
 
 		Song playSong = ContentHandler.queue.get(ContentHandler.songPosition);
+		currentSongTitle = playSong.getTitle();
 
-		long currSong = playSong.getId();
-		songTitle = playSong.getTitle();
-
-		Uri trackUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong);
+		Uri trackUri = ContentUris.withAppendedId(
+				android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, 
+				playSong.getId());
 
 		try{
 			player.setDataSource(getApplicationContext(), trackUri);
-		} catch(Exception e){
+		} catch(Exception e) {
 			Log.e("MUSIC SERVICE", "Error setting data source", e);
 		}
 
 		player.prepareAsync();
 	}
 
-	public void toggleShuffle(){
+	public void toggleShuffle() {
 		shuffle = !shuffle;
 	}
 
-	public void setSong(int songIndex){
+	public void setSong(int songIndex) {
 		ContentHandler.songPosition = songIndex;
 	}
 
-	public int getPos(){
+	public int getPos() {
 		return player.getCurrentPosition();
 	}
 
-	public int getDur(){
+	public int getDur() {
 		return player.getDuration();
 	}
 
-	public boolean isPlaying(){
+	public boolean isPlaying() {
 		return player.isPlaying();
 	}
 
-	public void pause(){
+	public void pause() {
 		player.pause();
 	}
 
-	public void seek(int pos){
+	public void seek(int pos) {
 		player.seekTo(pos);
 	}
 
-	public void go(){
+	public void start() {
 		player.start();
 	}
 
-	public void playPrev(){
+	public void playPrev() {
 		if(ContentHandler.queue.size() == 0) return;
-		
+
 		ContentHandler.songPosition--;
 		if(ContentHandler.songPosition < 0) ContentHandler.songPosition = ContentHandler.queue.size()-1;
 
 		playSong();
 	}
 
-	public void playNext(){
+	public void playNext() {
 		if(ContentHandler.queue.size() == 0) return;
-		
-		if(shuffle){
+
+		if(shuffle) {
 			int newSong = ContentHandler.songPosition;
 
-			while(newSong == ContentHandler.songPosition){
+			while(newSong == ContentHandler.songPosition) {
 				newSong = rand.nextInt(ContentHandler.queue.size());
 			}
 			ContentHandler.songPosition = newSong;
@@ -133,17 +132,20 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 			ContentHandler.songPosition++;
 			if(ContentHandler.songPosition >= ContentHandler.queue.size()) ContentHandler.songPosition = 0;
 		}
-		
+
 		playSong();
 	}
 
+	/*
+	 * Overridden functions of Service
+	 */
 	@Override
 	public IBinder onBind(Intent intent) {
 		return musicBind;
 	}
 
 	@Override
-	public boolean onUnbind(Intent intent){
+	public boolean onUnbind(Intent intent) {
 		player.stop();
 		player.release();
 
@@ -152,7 +154,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
 	@Override
 	public void onCompletion(MediaPlayer mp) {
-		if(player.getCurrentPosition() > 0){
+		if(player.getCurrentPosition() > 0) {
 			mp.reset();
 			playNext();
 		}
@@ -176,10 +178,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
 		builder.setContentIntent(pendInt)
 		.setSmallIcon(R.drawable.status_bar_icon)
-		.setTicker(songTitle)
+		.setTicker(currentSongTitle)
 		.setOngoing(true)
 		.setContentTitle("Playing")
-		.setContentText(songTitle);
+		.setContentText(currentSongTitle);
 		Notification not = builder.build();
 
 		startForeground(NOTIFY_ID, not);

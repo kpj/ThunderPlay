@@ -11,16 +11,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 
 import com.kpj.thunderplay.fs.FileHandler;
 import com.kpj.thunderplay.gui.DialogHandler;
-import com.kpj.thunderplay.gui.Song;
-import com.kpj.thunderplay.gui.TabsPagerAdapter;
+import com.kpj.thunderplay.gui.adapter.TabsPagerAdapter;
 import com.kpj.thunderplay.music.MusicPlayer;
 import com.kpj.thunderplay.music.MusicService;
 import com.kpj.thunderplay.music.MusicService.MusicBinder;
@@ -28,41 +24,44 @@ import com.kpj.thunderplay.music.MusicService.MusicBinder;
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	private Context ctx = this;
 
-	private MusicPlayer mplayer;
-
 	private ViewPager viewPager;
-	private TabsPagerAdapter mAdapter;
+	private TabsPagerAdapter tabAdapter;
 	private ActionBar actionBar;
 
 	private String[] tabs = { "All Songs", "Queue", "Playlists" };
 
-	private boolean isActivityInForeground = false;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 
 		ContentHandler.ctx = this;
+		ContentHandler.mplayer = new MusicPlayer();
 
-		mplayer = new MusicPlayer(this);
-
-		// tabbed view
-		viewPager = (ViewPager) findViewById(R.id.activity_main);
-		actionBar = getActionBar();
-		mAdapter = new TabsPagerAdapter(this, getFragmentManager());
-
+		// setup activity
+		setContentView(R.layout.activity_main);
 		registerForContextMenu(findViewById(R.id.activity_main));
 
-		viewPager.setAdapter(mAdapter);
+		// tabbed view
+		setupTabs();
+
+		// initialize controller
+		ContentHandler.mplayer.enableController();
+	}
+
+	/*
+	 * Set up the GUI
+	 */
+	public void setupTabs() {
+		viewPager = (ViewPager) findViewById(R.id.activity_main);
+		actionBar = getActionBar();
+		tabAdapter = new TabsPagerAdapter(this, getFragmentManager());
+
+		viewPager.setAdapter(tabAdapter);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
 
 		for (String tab_name : tabs) {
-			Tab cur = actionBar.newTab().setText(tab_name).setTabListener(this);
-			//cur.setTag(tab_name.toString().toLowerCase(Locale.getDefault()).replaceAll(" ", "_"));
-
-			actionBar.addTab(cur);
+			actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this));
 		}
 
 		// reselect tab on swipe
@@ -80,75 +79,34 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
-
-		// enable controller
-		mplayer.setController();
 	}
 
-	public void songlist_onclick(View view){
-		int ind = Integer.parseInt(view.getTag().toString());
-		ContentHandler.queueFragment.addSong(ContentHandler.allsongsFragment.getSongAt(ind));
-	}
-
-	public void playqueue_onclick(View view) {
-		mplayer.musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
-		mplayer.musicSrv.playSong();
-
-		if(mplayer.playbackPaused) {
-			mplayer.setController();
-			mplayer.playbackPaused = false;
-		}
-
-		if(isActivityInForeground) {
-			mplayer.controller.show(0);
-		}
-	}
-
-	public void playlistlist_onclick(View view) {
-		int ind = Integer.parseInt(view.getTag().toString());
-
-		String plname = ContentHandler.playlists.get(ind);
-		//ContentHandler.queue = FileHandler.readPlaylist(ctx, plname);
-		//ContentHandler.queueFragment.update();
-		// why does the above not work?
-
-		ContentHandler.queueFragment.clear();
-		for(Song s : FileHandler.readPlaylist(ctx, plname)) {
-			ContentHandler.queueFragment.addSong(s);
-		}
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		if(mplayer.playIntent == null){
-			mplayer.playIntent = new Intent(this, MusicService.class);
-			bindService(mplayer.playIntent, musicConnection, Context.BIND_AUTO_CREATE);
-			startService(mplayer.playIntent);
-		}
-	}
-
-	private ServiceConnection musicConnection = new ServiceConnection(){
+	/*
+	 * Handle the music connection
+	 */
+	private ServiceConnection musicConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			MusicBinder binder = (MusicBinder) service;
 
-			mplayer.musicSrv = binder.getService();
-			mplayer.musicBound = true;
+			ContentHandler.mplayer.musicSrv = binder.getService();
+			ContentHandler.mplayer.musicBound = true;
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			mplayer.musicBound = false;
+			ContentHandler.mplayer.musicBound = false;
 		}
 	};
 
+	/*
+	 * Create the options menu
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.toggle_shuffle, menu);
-		getMenuInflater().inflate(R.menu.save_queue, menu);
-		getMenuInflater().inflate(R.menu.clear_queue, menu);
+		getMenuInflater().inflate(R.menu.om_toggle_shuffle, menu);
+		getMenuInflater().inflate(R.menu.om_save_queue, menu);
+		getMenuInflater().inflate(R.menu.om_clear_queue, menu);
 		return true;
 	}
 
@@ -158,11 +116,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		switch(id) {
 		case R.id.clear_queue:
 			ContentHandler.queueFragment.clear();
-			mplayer.pause();
-			mplayer.controller.myHide();
+			ContentHandler.mplayer.pause();
+			ContentHandler.mplayer.controller.myHide();
 			return true;
 		case R.id.toggle_shuffle:
-			mplayer.musicSrv.toggleShuffle();
+			ContentHandler.mplayer.musicSrv.toggleShuffle();
 			item.setChecked(!item.isChecked());
 			return true;
 		case R.id.save_queue:
@@ -172,6 +130,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		return super.onOptionsItemSelected(item);
 	}
 
+	/*
+	 * Overridden functions of the tab listener
+	 */
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 	}
@@ -185,43 +146,56 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
 
+	/*
+	 * Overridden functions of the FragmentActivity
+	 */
 	@Override
-	protected void onPause(){
-		super.onPause();
+	protected void onStart() {
+		super.onStart();
 
-		mplayer.paused = true;
+		if(ContentHandler.mplayer.playIntent == null) {
+			ContentHandler.mplayer.playIntent = new Intent(this, MusicService.class);
+			bindService(ContentHandler.mplayer.playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+			startService(ContentHandler.mplayer.playIntent);
+		}
 	}
 
 	@Override
-	protected void onResume(){
+	protected void onPause() {
+		super.onPause();
+
+		ContentHandler.isActivityPaused = true;
+
+		FileHandler.writeObject(
+				ctx,
+				ContentHandler.queue_filename,
+				ContentHandler.queue);
+	}
+
+	@Override
+	protected void onResume() {
 		super.onResume();
 
-		if(mplayer.paused){
-			mplayer.setController();
-			mplayer.paused = false;
+		if(ContentHandler.isActivityPaused) {
+			ContentHandler.mplayer.enableController();
+			ContentHandler.isActivityPaused = false;
 		}
 
-		isActivityInForeground = true;
+		ContentHandler.isActivityInForeground = true;
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
 
-		mplayer.controller.hide();
-		isActivityInForeground = false;
-
-		FileHandler.writeObject(
-			ctx,
-			ContentHandler.queue_filename,
-			ContentHandler.queue
-		);
+		ContentHandler.mplayer.controller.hide();
+		ContentHandler.isActivityInForeground = false;
 	}
 
 	@Override
 	protected void onDestroy() {
-		stopService(mplayer.playIntent);
-		mplayer.musicSrv = null;
+		stopService(ContentHandler.mplayer.playIntent);
+		ContentHandler.mplayer.musicSrv = null;
 
 		super.onDestroy();
 	}

@@ -15,33 +15,38 @@ import android.widget.ListView;
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
 import com.kpj.thunderplay.fs.FileHandler;
+import com.kpj.thunderplay.gui.adapter.PlaylistAdapter;
 
-public class PlaylistList extends Fragment {
+public class Playlists extends Fragment {
 	private PlaylistAdapter plAdt;
 
-	public PlaylistList() {}
-
-	public void addPlaylist(Song s) {
-		ContentHandler.queue.add(s);		
-		plAdt.notifyDataSetChanged();
+	public Playlists() {
+		reload();
 	}
+
 	public void rmPlaylistAt(int pos) {		
 		ContentHandler.playlists.remove(pos);
-		plAdt.notifyDataSetChanged();
+		update();
+	}
+
+	public void reload() {
+		ContentHandler.playlists = FileHandler.getPlaylistNames(ContentHandler.ctx);
+		update(); // why is this not working?
 	}
 
 	public void clear() {
 		ContentHandler.playlists.clear();
-		plAdt.notifyDataSetChanged();
+		update();
 	}
-	
-	public void update() {
-		plAdt.notifyDataSetChanged();
+
+	private void update() {
+		if(plAdt != null)
+			plAdt.notifyDataSetChanged();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ListView rootView = (ListView) inflater.inflate(R.layout.song_list, container, false);		
+		ListView rootView = (ListView) inflater.inflate(R.layout.list_songlist, container, false);		
 
 		plAdt = new PlaylistAdapter(inflater, ContentHandler.playlists);
 		rootView.setAdapter(plAdt);
@@ -54,7 +59,7 @@ public class PlaylistList extends Fragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {  
 		super.onCreateContextMenu(menu, v, menuInfo);
-		
+
 		menu.add(Menu.NONE, R.id.cm_delete_playlist, Menu.NONE, "Delete");
 	}
 
@@ -69,7 +74,7 @@ public class PlaylistList extends Fragment {
 			rmPlaylistAt(pos);
 			break;
 		}
-		
+
 		return super.onContextItemSelected(item);
 	}
 }
