@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -163,14 +164,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	protected void onPause() {
-		super.onPause();
-
+		ContentHandler.mplayer.controller.myHide();
 		ContentHandler.isActivityPaused = true;
 
 		FileHandler.writeObject(
 				ctx,
 				ContentHandler.queue_filename,
 				ContentHandler.queue);
+		
+		super.onPause();
 	}
 
 	@Override
@@ -187,10 +189,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	protected void onStop() {
-		super.onStop();
-
-		ContentHandler.mplayer.controller.hide();
 		ContentHandler.isActivityInForeground = false;
+		
+		super.onStop();
 	}
 
 	@Override
