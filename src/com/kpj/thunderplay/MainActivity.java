@@ -195,6 +195,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	protected void onDestroy() {
 		stopService(ContentHandler.mplayer.playIntent);
+		unbindService(musicConnection);
 		ContentHandler.mplayer.musicSrv = null;
 
 		super.onDestroy();
