@@ -60,7 +60,7 @@ public class MusicPlayer implements MediaPlayerControl {
 			playbackPaused = false;
 		}
 
-		controller.show(0);
+		controller.show();
 	}
 
 	private void playPrev() {
@@ -71,7 +71,7 @@ public class MusicPlayer implements MediaPlayerControl {
 			playbackPaused = false;
 		}
 
-		controller.show(0);
+		controller.show();
 	}
 
 	/*

@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.fs.FileHandler;
+import com.kpj.thunderplay.gui.Overview;
 import com.kpj.thunderplay.gui.Playlists;
 import com.kpj.thunderplay.gui.Queue;
-import com.kpj.thunderplay.gui.Overview;
 import com.kpj.thunderplay.music.MusicHandler;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
