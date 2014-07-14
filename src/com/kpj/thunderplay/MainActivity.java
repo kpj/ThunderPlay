@@ -182,6 +182,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			ContentHandler.mplayer.enableController();
 			if(ContentHandler.mplayer.isPlaying())
 				ContentHandler.mplayer.controller.show();
+			
 			ContentHandler.isActivityPaused = false;
 		}
 

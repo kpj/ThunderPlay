@@ -20,7 +20,7 @@ public abstract class Songs extends Fragment {
 	protected SonglistAdapter adapter;
 	
 	private OnClickListener itemOnClickListener;
-		
+			
 	public Songs(ArrayList<Song> es) {
 		elements = es;
 	}
