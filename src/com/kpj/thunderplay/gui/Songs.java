@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.kpj.thunderplay.ContentHandler;
@@ -27,6 +28,11 @@ public abstract class Songs extends Fragment {
 	
 	public void addSong(Song s) {
 		elements.add(s);
+		update();
+	}
+	
+	public void setList(ArrayList<Song> sl) {
+		elements = sl;
 		update();
 	}
 	
@@ -51,11 +57,12 @@ public abstract class Songs extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ListView rootView = (ListView) inflater.inflate(R.layout.list_songlist, container, false);		
+		LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.list_songlist, container, false);		
 
+		ListView lview = (ListView) rootView.findViewById(R.id.song_list);
 		adapter = new SonglistAdapter(inflater, elements);
 		adapter.setOnClickListener(itemOnClickListener);
-		rootView.setAdapter(adapter);
+		lview.setAdapter(adapter);
 		
 		return rootView;
 	}

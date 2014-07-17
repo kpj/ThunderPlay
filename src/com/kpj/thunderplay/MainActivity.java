@@ -1,5 +1,7 @@
 package com.kpj.thunderplay;
 
+import java.util.ArrayList;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
@@ -7,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
@@ -14,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.fs.FileHandler;
 import com.kpj.thunderplay.gui.DialogHandler;
 import com.kpj.thunderplay.gui.adapter.TabsPagerAdapter;
@@ -37,15 +41,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		ContentHandler.ctx = this;
 		ContentHandler.mplayer = new MusicPlayer();
 
+		// handle configuration
+		load_configuration();
+		
 		// setup activity
 		setContentView(R.layout.activity_main);
 		registerForContextMenu(findViewById(R.id.activity_main));
 
 		// tabbed view
 		setupTabs();
-
-		// initialize controller
-		ContentHandler.mplayer.enableController();
 	}
 
 	/*
@@ -79,6 +83,39 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+	}
+
+	/*
+	 * Handle configuration
+	 */
+	private void load_configuration() {
+		// preferences
+		SharedPreferences settings = getSharedPreferences("com.kpj.thunderplay", 0);
+
+		ContentHandler.songPosition = settings.getInt("songPosition", -1);
+		ContentHandler.songProgress = settings.getInt("songProgress", -1);
+		
+		// files
+		@SuppressWarnings("unchecked")
+		ArrayList<Song> tmp = (ArrayList<Song>) FileHandler.readObject(ctx, ContentHandler.queue_filename);
+		ContentHandler.queue = (tmp!=null)?tmp:new ArrayList<Song>();
+	}
+
+	private void save_configuration() {
+		// preferences
+		SharedPreferences settings = getSharedPreferences("com.kpj.thunderplay", 0);
+		SharedPreferences.Editor editor = settings.edit();
+		
+		editor.putInt("songPosition", ContentHandler.songPosition);
+		editor.putInt("songProgress", ContentHandler.songProgress);
+		
+		editor.commit();
+
+		// files
+		FileHandler.writeObject(
+				ctx,
+				ContentHandler.queue_filename,
+				ContentHandler.queue);
 	}
 
 	/*
@@ -116,7 +153,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		switch(id) {
 		case R.id.clear_queue:
 			ContentHandler.queueFragment.clear();
-			ContentHandler.mplayer.controller.myHide();
 			ContentHandler.songPosition = -1;
 			if(ContentHandler.mplayer.isPlaying()) ContentHandler.mplayer.pause();
 			return true;
@@ -163,14 +199,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	protected void onPause() {
-		ContentHandler.mplayer.controller.myHide();
 		ContentHandler.isActivityPaused = true;
+		save_configuration();
 
-		FileHandler.writeObject(
-				ctx,
-				ContentHandler.queue_filename,
-				ContentHandler.queue);
-		
 		super.onPause();
 	}
 
@@ -178,11 +209,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onResume() {
 		super.onResume();
 
-		if(ContentHandler.isActivityPaused) {
-			ContentHandler.mplayer.enableController();
-			if(ContentHandler.mplayer.isPlaying())
-				ContentHandler.mplayer.controller.show();
-			
+		if(ContentHandler.isActivityPaused) {			
 			ContentHandler.isActivityPaused = false;
 		}
 
@@ -192,7 +219,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	protected void onStop() {
 		ContentHandler.isActivityInForeground = false;
-		
+
 		super.onStop();
 	}
 

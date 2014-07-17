@@ -5,21 +5,35 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
 import com.kpj.thunderplay.data.Song;
+import com.kpj.thunderplay.gui.bar.MusicController;
 
 public class Queue extends Songs {
 	public Queue(ArrayList<Song> es) {
 		super(es);
+		
+		setListItemOnClickEvent(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				int ind = Integer.parseInt(view.getTag().toString());
+
+				ContentHandler.songProgress = -1;
+				ContentHandler.mplayer.musicSrv.setSong(ind);
+				ContentHandler.mplayer.startPlayback();
+			}
+		});
 	}
 
 	public void moveSong(int curPos, int dist) {
@@ -43,9 +57,13 @@ public class Queue extends Songs {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ListView rootView = (ListView) super.onCreateView(inflater, container, savedInstanceState);		
+		LinearLayout rootView = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);		
 		registerForContextMenu(rootView);
-		
+
+		RelativeLayout bbar = (RelativeLayout) rootView.findViewById(R.id.bottom_bar);
+		ContentHandler.controller = new MusicController();
+		ContentHandler.controller.initView(bbar);
+
 		return rootView;
 	}
 

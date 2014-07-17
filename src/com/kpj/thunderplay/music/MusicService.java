@@ -35,8 +35,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	public void onCreate() {
 		super.onCreate();
 
-		ContentHandler.songPosition = 0;
-
 		player = new MediaPlayer();
 		rand = new Random();
 
@@ -73,7 +71,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		} catch(Exception e) {
 			Log.e("MUSIC SERVICE", "Error setting data source", e);
 		}
-
+		
+		ContentHandler.songPrepared = false;
 		player.prepareAsync();
 	}
 
@@ -175,6 +174,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		if(player.getCurrentPosition() > 0) {
+			ContentHandler.songProgress = -1;
 			mp.reset();
 			playNext();
 		}
@@ -188,6 +188,11 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
+		ContentHandler.songDuration = mp.getDuration();
+		
+		if(ContentHandler.songProgress != -1) mp.seekTo(ContentHandler.songProgress);
+		ContentHandler.songPrepared = true;
+		
 		mp.start();
 
 		Intent notIntent = new Intent(this, MainActivity.class);

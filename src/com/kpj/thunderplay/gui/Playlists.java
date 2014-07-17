@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.kpj.thunderplay.ContentHandler;
@@ -46,10 +47,11 @@ public class Playlists extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ListView rootView = (ListView) inflater.inflate(R.layout.list_songlist, container, false);		
+		LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.list_songlist, container, false);		
 
+		ListView lview = (ListView) rootView.findViewById(R.id.song_list);
 		plAdt = new PlaylistAdapter(inflater, ContentHandler.playlists);
-		rootView.setAdapter(plAdt);
+		lview.setAdapter(plAdt);
 
 		registerForContextMenu(rootView);
 

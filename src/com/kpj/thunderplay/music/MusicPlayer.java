@@ -1,11 +1,9 @@
 package com.kpj.thunderplay.music;
 
-import com.kpj.thunderplay.ContentHandler;
-
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.widget.MediaController.MediaPlayerControl;
+
+import com.kpj.thunderplay.ContentHandler;
 
 
 public class MusicPlayer implements MediaPlayerControl {
@@ -13,65 +11,46 @@ public class MusicPlayer implements MediaPlayerControl {
 	public Intent playIntent;
 
 	public boolean musicBound = false;
-	public boolean playbackPaused = false;
-
-	public MusicController controller;
-
-	/*
-	 * Setup music control panel
-	 */
-	public void enableController() {
-		controller = new MusicController(ContentHandler.ctx);
-
-		controller.setPrevNextListeners(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				playNext();
-			}
-		}, new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				playPrev();
-			}
-		});
-
-		controller.setMediaPlayer(this);
-		controller.setAnchorView(((FragmentActivity) ContentHandler.ctx).findViewById(android.R.id.content));
-		controller.setEnabled(true);
-	}
+	public boolean playbackPaused = true;
 
 	/*
 	 * Control playback
 	 */
 	public void startPlayback() {
+		if(ContentHandler.songPosition == -1)
+			return;
+		
 		musicSrv.playSong();
 
 		if(playbackPaused) {
-			enableController();
 			playbackPaused = false;
 		}
+		
+		ContentHandler.controller.onPlay();
+	}
+	
+	public void pausePlayback() {
+		pause();
+		
+		ContentHandler.controller.onPause();
 	}
 
-	private void playNext() {
+	public void playNext() {
 		musicSrv.playNext();
+		ContentHandler.songProgress = -1;
 
 		if(playbackPaused) {
-			enableController();
 			playbackPaused = false;
 		}
-
-		controller.show();
 	}
 
-	private void playPrev() {
+	public void playPrev() {
 		musicSrv.playPrev();
+		ContentHandler.songProgress = -1;
 
 		if(playbackPaused) {
-			enableController();
 			playbackPaused = false;
 		}
-
-		controller.show();
 	}
 
 	/*
