@@ -19,6 +19,7 @@ public class MusicController implements  OnSeekBarChangeListener {
 	private SeekBar sProgress;
 
 	private Handler handler;
+	private boolean stopRunnable = false;
 
 	public MusicController() {
 		handler = new Handler();
@@ -112,6 +113,14 @@ public class MusicController implements  OnSeekBarChangeListener {
 		ppButton.setText("Play");
 	}
 
+	public void onBackground() {
+		stopRunnable = true;
+	}
+	
+	public void onForeground() {
+		handler.postDelayed(progressBarUpdater, 0);
+	}
+	
 	/*
 	 * Update progress bar
 	 */
@@ -123,8 +132,11 @@ public class MusicController implements  OnSeekBarChangeListener {
 
 				sProgress.setProgress(pos);
 				sProgress.setMax(dur);
-
-				handler.postDelayed(this, 100);
+				
+				if(stopRunnable)
+					stopRunnable = false;
+				else
+					handler.postDelayed(this, 100);
 			}
 		}
 

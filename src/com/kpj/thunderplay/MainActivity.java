@@ -201,6 +201,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onPause() {
 		ContentHandler.isActivityPaused = true;
 		save_configuration();
+		
+		ContentHandler.controller.onBackground();
 
 		super.onPause();
 	}
@@ -214,6 +216,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		}
 
 		ContentHandler.isActivityInForeground = true;
+		
+		if(ContentHandler.controller != null) ContentHandler.controller.onForeground();
 	}
 
 	@Override
