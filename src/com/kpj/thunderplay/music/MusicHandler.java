@@ -1,15 +1,13 @@
 package com.kpj.thunderplay.music;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-import com.kpj.thunderplay.data.Song;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+
+import com.kpj.thunderplay.data.Song;
 
 
 public class MusicHandler {
@@ -37,13 +35,6 @@ public class MusicHandler {
 			}
 			while (musicCursor.moveToNext());
 		}
-
-		// sort songs
-		Collections.sort(songList, new Comparator<Song>() {
-			public int compare(Song a, Song b) {
-				return a.getTitle().compareTo(b.getTitle());
-			}
-		});
 
 		musicCursor.close();
 		return songList;

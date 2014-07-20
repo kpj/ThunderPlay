@@ -142,6 +142,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.om_toggle_shuffle, menu);
+		getMenuInflater().inflate(R.menu.om_shuffle_queue, menu);
 		getMenuInflater().inflate(R.menu.om_save_queue, menu);
 		getMenuInflater().inflate(R.menu.om_clear_queue, menu);
 		return true;
@@ -162,6 +163,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			return true;
 		case R.id.save_queue:
 			DialogHandler.saveQueue(ctx);
+			return true;
+		case R.id.shuffle_queue:
+			ContentHandler.queueFragment.shuffle();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

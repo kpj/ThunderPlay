@@ -1,6 +1,8 @@
 package com.kpj.thunderplay.gui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -44,6 +46,15 @@ public abstract class Songs extends Fragment {
 	
 	public void clear() {
 		elements.clear();
+		update();
+	}
+	
+	public void sort(Comparator<Song> comp) {
+		Collections.sort(elements, comp);
+	}
+	
+	public void shuffle() {
+		Collections.shuffle(elements);
 		update();
 	}
 	
