@@ -58,7 +58,6 @@ public class Queue extends Songs {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		LinearLayout rootView = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);		
-		registerForContextMenu(rootView);
 
 		RelativeLayout bbar = (RelativeLayout) rootView.findViewById(R.id.bottom_bar);
 		ContentHandler.controller = new MusicController();

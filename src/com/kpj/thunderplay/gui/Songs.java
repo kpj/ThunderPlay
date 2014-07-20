@@ -71,6 +71,7 @@ public abstract class Songs extends Fragment {
 		LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.list_songlist, container, false);		
 
 		ListView lview = (ListView) rootView.findViewById(R.id.song_list);
+		registerForContextMenu(lview);
 		adapter = new SonglistAdapter(inflater, elements);
 		adapter.setOnClickListener(itemOnClickListener);
 		lview.setAdapter(adapter);
