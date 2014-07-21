@@ -7,7 +7,7 @@ import org.acra.annotation.ReportsCrashes;
 import android.app.Application;
 
 @ReportsCrashes(formKey = "",
-	mailTo = "kpjkpjkpjkpjkpjkpj@gmail.com",
+	mailTo = "kpjkpjkpjkpjkpjkpj+thunderplay@googlemail.com",
 	mode = ReportingInteractionMode.TOAST,
 	resToastText = R.string.crash_report)
 public class ACRAApplication extends Application {
