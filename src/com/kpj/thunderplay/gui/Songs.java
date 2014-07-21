@@ -38,6 +38,10 @@ public abstract class Songs extends Fragment {
 		update();
 	}
 	
+	public int getSize() {
+		return elements.size();
+	}
+	
 	public void rmSongAt(int pos) {
 		ContentHandler.alreadyPlayed.remove(elements.get(pos));
 		elements.remove(pos);

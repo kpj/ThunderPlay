@@ -17,21 +17,27 @@ public class MusicPlayer implements MediaPlayerControl {
 	 * Control playback
 	 */
 	public void startPlayback() {
-		if(ContentHandler.songPosition == -1)
-			return;
-		
+		if(ContentHandler.songPosition == -1) {
+			if(ContentHandler.queueFragment.getSize() > 0) {
+				ContentHandler.songPosition = 0;
+				ContentHandler.songProgress = -1;
+			} else {
+				return;
+			}
+		}
+
 		musicSrv.playSong();
 
 		if(playbackPaused) {
 			playbackPaused = false;
 		}
-		
+
 		ContentHandler.controller.onPlay();
 	}
-	
+
 	public void pausePlayback() {
 		pause();
-		
+
 		ContentHandler.controller.onPause();
 	}
 

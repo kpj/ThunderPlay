@@ -112,6 +112,10 @@ public class MusicController implements  OnSeekBarChangeListener {
 	public void onPause() {
 		ppButton.setText("Play");
 	}
+	
+	public void onStop() {
+		ppButton.setText("Play");
+	}
 
 	public void onBackground() {
 		stopRunnable = true;
