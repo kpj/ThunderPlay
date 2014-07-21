@@ -15,5 +15,6 @@
     <string name="cm_move_up">Move up</string>
     <string name="cm_move_down">Move down</string>
     <string name="empty_list">Empty</string>
+    <string name="crash_report">Crash Report</string>
 
 </resources>

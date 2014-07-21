@@ -37,13 +37,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		ContentHandler.ctx = this;
 		ContentHandler.mplayer = new MusicPlayer();
 
 		// handle configuration
 		load_configuration();
-		
+
 		// setup activity
 		setContentView(R.layout.activity_main);
 		registerForContextMenu(findViewById(R.id.activity_main));
@@ -94,7 +94,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		ContentHandler.songPosition = settings.getInt("songPosition", -1);
 		ContentHandler.songProgress = settings.getInt("songProgress", -1);
-		
+
 		// files
 		@SuppressWarnings("unchecked")
 		ArrayList<Song> tmp = (ArrayList<Song>) FileHandler.readObject(ctx, ContentHandler.queue_filename);
@@ -105,10 +105,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// preferences
 		SharedPreferences settings = getSharedPreferences("com.kpj.thunderplay", 0);
 		SharedPreferences.Editor editor = settings.edit();
-		
+
 		editor.putInt("songPosition", ContentHandler.songPosition);
 		editor.putInt("songProgress", ContentHandler.songProgress);
-		
+
 		editor.commit();
 
 		// files
@@ -205,7 +205,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onPause() {
 		ContentHandler.isActivityPaused = true;
 		save_configuration();
-		
+
 		ContentHandler.controller.onBackground();
 
 		super.onPause();
@@ -220,7 +220,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		}
 
 		ContentHandler.isActivityInForeground = true;
-		
+
 		if(ContentHandler.controller != null) ContentHandler.controller.onForeground();
 	}
 
