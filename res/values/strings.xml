@@ -16,5 +16,6 @@
     <string name="cm_move_down">Move down</string>
     <string name="empty_list">Empty</string>
     <string name="crash_report">Crash Report</string>
+    <string name="hm_song_status_indicator">Indicates playing status of song</string>
 
 </resources>

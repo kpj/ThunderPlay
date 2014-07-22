@@ -39,6 +39,7 @@ public class MusicPlayer implements MediaPlayerControl {
 		pause();
 
 		ContentHandler.controller.onPause();
+		ContentHandler.queueFragment.onSongPause();
 	}
 
 	public void playNext() {

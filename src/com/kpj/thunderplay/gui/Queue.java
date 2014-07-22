@@ -21,9 +21,11 @@ import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.gui.bar.MusicController;
 
 public class Queue extends Songs {
+	private int lastMarkedSongPosition = -1;
+
 	public Queue(ArrayList<Song> es) {
 		super(es);
-		
+
 		setListItemOnClickEvent(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -53,6 +55,19 @@ public class Queue extends Songs {
 	public void clear() {
 		ContentHandler.queue.clear();
 		update();
+	}
+
+	public void onPlaySong() {
+		if(lastMarkedSongPosition != -1)
+			hideMarker(lastMarkedSongPosition);
+
+		showMarker(ContentHandler.songPosition);
+
+		lastMarkedSongPosition = ContentHandler.songPosition;
+	}
+	
+	public void onSongPause() {		
+		hideMarker(ContentHandler.songPosition);
 	}
 
 	@Override

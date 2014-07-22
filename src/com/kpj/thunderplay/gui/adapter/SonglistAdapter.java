@@ -2,16 +2,16 @@ package com.kpj.thunderplay.gui.adapter;
 
 import java.util.ArrayList;
 
-import com.kpj.thunderplay.R;
-import com.kpj.thunderplay.data.Song;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.kpj.thunderplay.R;
+import com.kpj.thunderplay.data.Song;
 
 public class SonglistAdapter extends BaseAdapter {
 	private ArrayList<Song> elements;
@@ -45,7 +45,7 @@ public class SonglistAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LinearLayout layer = (LinearLayout) inflater.inflate(R.layout.list_songlist_item, parent, false);
+		RelativeLayout layer = (RelativeLayout) inflater.inflate(R.layout.list_songlist_item, parent, false);
 
 		// fill current item with information
 		TextView songView = (TextView) layer.findViewById(R.id.song_title);
