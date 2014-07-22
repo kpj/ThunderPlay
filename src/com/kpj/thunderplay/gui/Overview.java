@@ -10,7 +10,11 @@ import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.data.Song;
 
 
-public class Overview extends Songs {	
+public class Overview extends Songs {
+	public Overview() {
+		this(new ArrayList<Song>());
+	}
+	
 	public Overview(ArrayList<Song> es) {
 		super(es);
 		
