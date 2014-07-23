@@ -27,6 +27,9 @@ public class MusicHandler {
 					android.provider.MediaStore.Audio.Media.ARTIST);
 			int albumColumn = musicCursor.getColumnIndex(
 					android.provider.MediaStore.Audio.Media.ALBUM);
+			
+			int ismusicColumn = musicCursor.getColumnIndex(
+					android.provider.MediaStore.Audio.Media.IS_MUSIC);
 
 			do {
 				long thisId = musicCursor.getLong(idColumn);
@@ -34,7 +37,8 @@ public class MusicHandler {
 				String thisArtist = musicCursor.getString(artistColumn);
 				String thisAlbum = musicCursor.getString(albumColumn);
 				
-				songList.add(new Song(thisId, thisTitle, thisArtist, thisAlbum));
+				if(musicCursor.getInt(ismusicColumn) != 0)
+					songList.add(new Song(thisId, thisTitle, thisArtist, thisAlbum));
 			}
 			while (musicCursor.moveToNext());
 		}
