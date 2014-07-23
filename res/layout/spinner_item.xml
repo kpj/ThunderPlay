@@ -6,4 +6,5 @@
     android:ellipsize="marquee"
     android:gravity="center"
     android:singleLine="true"
-    android:textSize="18sp" />
+    android:textSize="21sp"
+    android:padding="3sp" />
