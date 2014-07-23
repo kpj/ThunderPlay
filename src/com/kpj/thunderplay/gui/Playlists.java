@@ -53,7 +53,7 @@ public class Playlists extends Fragment {
 		plAdt = new PlaylistAdapter(inflater, ContentHandler.playlists);
 		lview.setAdapter(plAdt);
 
-		registerForContextMenu(rootView);
+		registerForContextMenu(lview);
 
 		return rootView;
 	}
