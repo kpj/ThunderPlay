@@ -26,15 +26,15 @@ public class OverviewBar {
 
 		// label
 		label = new TextView(ContentHandler.ctx);
-		
+
 		label.setText("Sort by");
 		label.setTextSize(15);
 		label.setPadding(5, 0, 0, 0);
-		
+
 		params = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.CENTER_VERTICAL);
 		label.setLayoutParams(params);
-		
+
 		layout.addView(label);
 
 		// spinner
@@ -43,6 +43,7 @@ public class OverviewBar {
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("Title");
 		spinnerArray.add("Artist");
+		spinnerArray.add("Album");
 
 		ArrayAdapter<String> spinnerAda = new ArrayAdapter<String>(ContentHandler.ctx, R.layout.spinner_item, spinnerArray);
 		choices.setAdapter(spinnerAda);
@@ -63,6 +64,13 @@ public class OverviewBar {
 					ContentHandler.overviewFragment.sort(new Comparator<Song>() {
 						public int compare(Song a, Song b) {
 							return a.getArtist().compareTo(b.getArtist());
+						}
+					});
+					break;
+				case "Album":
+					ContentHandler.overviewFragment.sort(new Comparator<Song>() {
+						public int compare(Song a, Song b) {
+							return a.getAlbum().compareTo(b.getAlbum());
 						}
 					});
 					break;

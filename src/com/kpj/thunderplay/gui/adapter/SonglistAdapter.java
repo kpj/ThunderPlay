@@ -50,11 +50,13 @@ public class SonglistAdapter extends BaseAdapter {
 		// fill current item with information
 		TextView songView = (TextView) layer.findViewById(R.id.song_title);
 		TextView artistView = (TextView) layer.findViewById(R.id.song_artist);
+		TextView albumView = (TextView) layer.findViewById(R.id.song_album);
 
 		Song currSong = elements.get(position);
 
 		songView.setText(currSong.getTitle());
 		artistView.setText(currSong.getArtist());
+		albumView.setText(currSong.getAlbum());
 
 		layer.setTag(position);
 		
