@@ -55,6 +55,7 @@ public abstract class Songs extends Fragment {
 
 	public void sort(Comparator<Song> comp) {
 		Collections.sort(elements, comp);
+		update();
 	}
 
 	public void shuffle() {
@@ -109,6 +110,7 @@ public abstract class Songs extends Fragment {
 	}
 
 	protected void update() {
-		adapter.notifyDataSetChanged();
+		if(adapter != null)
+			adapter.notifyDataSetChanged();
 	}
 }

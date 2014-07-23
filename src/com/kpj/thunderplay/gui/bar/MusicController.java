@@ -11,7 +11,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.kpj.thunderplay.ContentHandler;
 
-public class MusicController implements  OnSeekBarChangeListener {
+public class MusicController implements OnSeekBarChangeListener {
 	private Button psButton;
 	private Button ppButton;
 	private Button nsButton;
