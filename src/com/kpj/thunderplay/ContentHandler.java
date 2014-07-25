@@ -9,6 +9,7 @@ import com.kpj.thunderplay.gui.Queue;
 import com.kpj.thunderplay.gui.Playlists;
 import com.kpj.thunderplay.gui.Overview;
 import com.kpj.thunderplay.gui.bar.MusicController;
+import com.kpj.thunderplay.music.MusicEqualizer;
 import com.kpj.thunderplay.music.MusicPlayer;
 
 
@@ -34,6 +35,6 @@ public class ContentHandler {
 	public static boolean isActivityPaused = false;
 
 	public static MusicPlayer mplayer;
-	
+	public static MusicEqualizer equalizer;
 	public static MusicController controller;
 }

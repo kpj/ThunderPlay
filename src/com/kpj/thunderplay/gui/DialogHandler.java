@@ -40,4 +40,29 @@ public class DialogHandler {
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
+	
+	public static void showEqualizer(final Context ctx) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+
+		ContentHandler.equalizer.saveCurrentFrequencies();
+		
+		builder.setTitle("Equalizer");
+		builder.setView(ContentHandler.equalizer.getView())
+		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				ContentHandler.equalizer.resetView();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				ContentHandler.equalizer.restoreSavedFrequencies();
+				ContentHandler.equalizer.resetView();
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
 }

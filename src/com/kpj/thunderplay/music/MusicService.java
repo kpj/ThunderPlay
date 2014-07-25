@@ -67,13 +67,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 				playSong.getId());
 
 		ContentHandler.queueFragment.onPlaySong();
-		
+
 		try {
 			player.setDataSource(getApplicationContext(), trackUri);
 		} catch(Exception e) {
 			Log.e("MUSIC SERVICE", "Error setting data source", e);
 		}
-		
+
 		ContentHandler.songPrepared = false;
 		player.prepareAsync();
 	}
@@ -130,7 +130,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
 			if(ContentHandler.queue.size() == 1)
 				ContentHandler.alreadyPlayed.clear();
-			
+
 			int newSong = ContentHandler.songPosition;
 			Song cur = null;
 			if(newSong != -1)
@@ -155,6 +155,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		ContentHandler.alreadyPlayed.clear();
 		if(ContentHandler.songPosition != -1)
 			ContentHandler.alreadyPlayed.add(ContentHandler.queue.get(ContentHandler.songPosition));
+	}
+
+	public int getAudioSessionId() {
+		return player.getAudioSessionId();
 	}
 
 	/*
@@ -191,10 +195,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		ContentHandler.songDuration = mp.getDuration();
-		
+
 		if(ContentHandler.songProgress != -1) mp.seekTo(ContentHandler.songProgress);
 		ContentHandler.songPrepared = true;
-		
+
 		mp.start();
 
 		Intent notIntent = new Intent(this, MainActivity.class);

@@ -145,6 +145,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		getMenuInflater().inflate(R.menu.om_shuffle_queue, menu);
 		getMenuInflater().inflate(R.menu.om_save_queue, menu);
 		getMenuInflater().inflate(R.menu.om_clear_queue, menu);
+		getMenuInflater().inflate(R.menu.om_show_equalizer, menu);
 		return true;
 	}
 
@@ -167,6 +168,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			return true;
 		case R.id.shuffle_queue:
 			ContentHandler.queueFragment.shuffle();
+			return true;
+		case R.id.show_equalizer:
+			DialogHandler.showEqualizer(ctx);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

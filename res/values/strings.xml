@@ -10,6 +10,7 @@
     <string name="save_queue">Save Queue</string>
     <string name="shuffle_queue">Shuffle Queue</string>
     <string name="toggle_shuffle">Toggle Shuffle</string>
+    <string name="show_equalizer">Show Equalizer</string>
     <string name="cm_delete_item">Delete</string>
     <string name="cm_delete_playlist">Delete</string>
     <string name="cm_move_up">Move up</string>

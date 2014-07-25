@@ -12,6 +12,12 @@ public class MusicPlayer implements MediaPlayerControl {
 
 	public boolean musicBound = false;
 	public boolean playbackPaused = true;
+	
+	public MusicPlayer() {
+		super();
+		
+		ContentHandler.equalizer = new MusicEqualizer(getAudioSessionId());
+	}
 
 	/*
 	 * Control playback
@@ -59,7 +65,7 @@ public class MusicPlayer implements MediaPlayerControl {
 			playbackPaused = false;
 		}
 	}
-
+	
 	/*
 	 * Overridden functions of MediaPlayerControl
 	 */
@@ -80,6 +86,8 @@ public class MusicPlayer implements MediaPlayerControl {
 
 	@Override
 	public int getAudioSessionId() {
+		if(musicSrv != null)
+			return musicSrv.getAudioSessionId();
 		return 0;
 	}
 
