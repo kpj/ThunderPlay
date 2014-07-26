@@ -2,8 +2,6 @@ package com.kpj.thunderplay.music;
 
 import java.util.Random;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -16,9 +14,8 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import com.kpj.thunderplay.ContentHandler;
-import com.kpj.thunderplay.MainActivity;
-import com.kpj.thunderplay.R;
 import com.kpj.thunderplay.data.Song;
+import com.kpj.thunderplay.gui.NotificationHandler;
 
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener  {
@@ -27,7 +24,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	private final IBinder musicBind = new MusicBinder();
 
 	private String currentSongTitle = "";
-	private static final int NOTIFY_ID = 1;
 
 	private boolean shuffle = false;
 	private Random rand;
@@ -201,21 +197,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
 		mp.start();
 
-		Intent notIntent = new Intent(this, MainActivity.class);
-		notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		PendingIntent pendInt = PendingIntent.getActivity(this, 0, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		Notification.Builder builder = new Notification.Builder(this);
-
-		builder.setContentIntent(pendInt)
-		.setSmallIcon(R.drawable.status_bar_icon)
-		.setTicker(currentSongTitle)
-		.setOngoing(true)
-		.setContentTitle("Playing")
-		.setContentText(currentSongTitle);
-		Notification not = builder.build();
-
-		startForeground(NOTIFY_ID, not);
+		NotificationHandler.showSongNotifier(this, currentSongTitle);
 	}
 
 	@Override
