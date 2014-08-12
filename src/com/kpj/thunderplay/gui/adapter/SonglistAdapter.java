@@ -1,12 +1,15 @@
 package com.kpj.thunderplay.gui.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,6 +30,56 @@ public class SonglistAdapter extends BaseAdapter {
 
 	public void setOnClickListener(OnClickListener listener) {
 		onClickListener = listener;
+	}
+
+	public void sort(Comparator<Long> comp) {
+		Collections.sort(elements, comp);
+		notifyDataSetChanged();
+	}
+	
+	public int getSize() {
+		return elements.size();
+	}
+	
+	public ArrayList<Long> getSongs() {
+		return elements;
+	}
+	
+	public Filter getFilter() {
+		return new Filter() {
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void publishResults(CharSequence constraint, FilterResults results) {
+				elements = (ArrayList<Long>) results.values;
+				notifyDataSetChanged();
+			}
+
+			@Override
+			protected FilterResults performFiltering(CharSequence constraint) {
+				ArrayList<Long> filteredResults = getFilteredResults(constraint);
+
+				FilterResults results = new FilterResults();
+				results.values = filteredResults;
+
+				return results;
+			}
+
+			private ArrayList<Long> getFilteredResults(CharSequence constraint) {
+				ArrayList<Long> res = new ArrayList<Long>();
+				constraint = constraint.toString().toLowerCase();
+				for(Long l : ContentHandler.allSongIds) {
+					Song cur = ContentHandler.allSongs.get(l);
+					if(
+							cur.getTitle().toLowerCase().contains(constraint) || 
+							cur.getArtist().toLowerCase().contains(constraint) || 
+							cur.getAlbum().toLowerCase().contains(constraint)) {
+						res.add(l);
+					}
+					
+				}
+				return res;
+			}
+		};
 	}
 
 	@Override

@@ -24,6 +24,7 @@ public class ContentHandler {
 	public final static String queue_filename = "queue.txt";
 	
 	public static LongSparseArray<Song> allSongs = new LongSparseArray<Song>();
+	public static ArrayList<Long> allSongIds = new ArrayList<Long>();
 	
 	public static ArrayList<Long> queue = new ArrayList<Long>();
 	public static ArrayList<Long> alreadyPlayed = new ArrayList<Long>();

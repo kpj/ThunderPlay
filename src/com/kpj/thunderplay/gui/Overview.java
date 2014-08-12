@@ -1,7 +1,6 @@
 package com.kpj.thunderplay.gui;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -33,13 +32,6 @@ public class Overview extends Songs {
 			public void onClick(View view) {
 				int ind = Integer.parseInt(view.getTag().toString());
 				ContentHandler.queueFragment.addSong(ContentHandler.overviewFragment.getSongAt(ind));
-			}
-		});
-		
-		// sort list content
-		sort(new Comparator<Long>() {
-			public int compare(Long a, Long b) {
-				return ContentHandler.allSongs.get(a).getTitle().compareTo(ContentHandler.allSongs.get(b).getTitle());
 			}
 		});
 	}

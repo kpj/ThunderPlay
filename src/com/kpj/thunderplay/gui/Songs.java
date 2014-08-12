@@ -38,7 +38,11 @@ public abstract class Songs extends Fragment {
 	}
 
 	public int getSize() {
-		return elements.size();
+		return adapter.getSize();
+	}
+	
+	public ArrayList<Long> getSongs() {
+		return adapter.getSongs();
 	}
 
 	public void rmSongAt(int pos) {
@@ -53,8 +57,7 @@ public abstract class Songs extends Fragment {
 	}
 
 	public void sort(Comparator<Long> comp) {
-		Collections.sort(elements, comp);
-		update();
+		adapter.sort(comp);
 	}
 
 	public void shuffle() {
@@ -81,6 +84,10 @@ public abstract class Songs extends Fragment {
 			v.findViewById(R.id.song_indicator).setVisibility(View.INVISIBLE);
 	}
 
+	public void setFilter(CharSequence cs) {
+		adapter.getFilter().filter(cs);
+	}
+	
 	private View getItemViewAt(int pos) {
 		ListView lview = (ListView) getView().findViewById(R.id.song_list);
 

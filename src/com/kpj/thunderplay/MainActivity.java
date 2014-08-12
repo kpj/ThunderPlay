@@ -50,6 +50,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		// load all songs
 		ContentHandler.allSongs = MusicHandler.getAllSongs(ctx);
+		ContentHandler.allSongIds = MusicHandler.map2list(ContentHandler.allSongs);
 
 		// tabbed view
 		setupTabs();
