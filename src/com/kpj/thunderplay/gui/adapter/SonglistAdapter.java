@@ -16,14 +16,14 @@ import com.kpj.thunderplay.data.Song;
 public class SonglistAdapter extends BaseAdapter {
 	private ArrayList<Song> elements;
 	private LayoutInflater inflater;
-	
+
 	private OnClickListener onClickListener = null;
 
 	public SonglistAdapter(LayoutInflater infl, ArrayList<Song> es) {
 		elements = es;
 		inflater = infl;
 	}
-	
+
 	public void setOnClickListener(OnClickListener listener) {
 		onClickListener = listener;
 	}
@@ -35,12 +35,12 @@ public class SonglistAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int i) {
-		return null;
+		return elements.get(i);
 	}
 
 	@Override
 	public long getItemId(int i) {
-		return 0;
+		return elements.get(i).getId();
 	}
 
 	@Override
@@ -59,13 +59,13 @@ public class SonglistAdapter extends BaseAdapter {
 		albumView.setText(currSong.getAlbum());
 
 		layer.setTag(position);
-		
+
 		// set onClick event handler
 		layer.setOnClickListener(onClickListener);
-		
+
 		// enable long clicks
 		layer.setLongClickable(true);
-		
+
 		return layer;
 	}
 }

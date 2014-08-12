@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
@@ -74,7 +73,7 @@ public class Queue extends Songs {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		LinearLayout rootView = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);		
 
-		RelativeLayout bbar = (RelativeLayout) rootView.findViewById(R.id.bottom_bar);
+		LinearLayout bbar = (LinearLayout) rootView.findViewById(R.id.bottom_bar_preview);
 		ContentHandler.controller = new MusicController();
 		ContentHandler.controller.initView(bbar);
 

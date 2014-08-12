@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.kpj.thunderplay.ContentHandler;
@@ -21,9 +23,22 @@ public class OverviewBar {
 	private TextView label;
 	private Spinner choices;
 
-	public void initView(RelativeLayout layout) {
-		LayoutParams params;
+	public void initView(LinearLayout layout) {
+		TableRow.LayoutParams params;
 
+		// container table
+		TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+		
+		TableLayout table = new TableLayout(ContentHandler.ctx);
+		table.setLayoutParams(tableParams);
+		
+		TableRow row;
+		
+		// first row
+		row = new TableRow(ContentHandler.ctx);
+		row.setLayoutParams(tableParams);
+		row.setGravity(Gravity.CENTER);
+		
 		// label
 		label = new TextView(ContentHandler.ctx);
 
@@ -31,11 +46,10 @@ public class OverviewBar {
 		label.setTextSize(15);
 		label.setPadding(5, 0, 0, 0);
 
-		params = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.CENTER_VERTICAL);
+		params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 		label.setLayoutParams(params);
 
-		layout.addView(label);
+		row.addView(label);
 
 		// spinner
 		choices = new Spinner(ContentHandler.ctx);
@@ -83,10 +97,15 @@ public class OverviewBar {
 			}
 		});
 
-		params = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 		choices.setLayoutParams(params);
 
-		layout.addView(choices);
+		row.addView(choices);
+		
+		// finish first row
+		table.addView(row);
+		
+		// finish layout
+		layout.addView(table);
 	}
 }

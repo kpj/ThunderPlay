@@ -4,20 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/song_list"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="42"
-        android:fastScrollEnabled="true" />
-
-    <RelativeLayout
-        android:id="@+id/bottom_bar"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/lib/com.sothree.slidinguppanel"
+        android:id="@+id/bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_height="match_parent"
         android:background="@color/bar_background"
-        android:orientation="horizontal" >
-    </RelativeLayout>
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        sothree:collapsedHeight="40dp" >
+
+        <ListView
+            android:id="@+id/song_list"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:fastScrollEnabled="true" />
+
+        <LinearLayout
+            android:id="@+id/bottom_bar_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bar_background"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </LinearLayout>

@@ -8,8 +8,8 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -98,8 +98,8 @@ public abstract class Songs extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.list_songlist, container, false);		
-
+		LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.list_songlist, container, false);
+		
 		ListView lview = (ListView) rootView.findViewById(R.id.song_list);
 		registerForContextMenu(lview);
 		adapter = new SonglistAdapter(inflater, elements);

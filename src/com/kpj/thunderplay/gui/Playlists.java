@@ -47,7 +47,7 @@ public class Playlists extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.list_songlist, container, false);		
+		LinearLayout rootView = (LinearLayout) inflater.inflate(R.layout.list_playlist, container, false);		
 
 		ListView lview = (ListView) rootView.findViewById(R.id.song_list);
 		plAdt = new PlaylistAdapter(inflater, ContentHandler.playlists);

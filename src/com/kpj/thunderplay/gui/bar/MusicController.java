@@ -4,8 +4,8 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -17,10 +17,12 @@ public class MusicController implements OnSeekBarChangeListener {
 	private Button nsButton;
 
 	private SeekBar sProgress;
+	
+	private ImageView cover;
 
 	private Handler handler;
 	private boolean stopRunnable = false;
-
+	
 	public MusicController() {
 		handler = new Handler();
 	}
@@ -28,9 +30,15 @@ public class MusicController implements OnSeekBarChangeListener {
 	/*
 	 * Setup layout
 	 */
-	public void initView(RelativeLayout layout) {
-		LayoutParams params;
-
+	public void initView(LinearLayout layout) {
+		LinearLayout.LayoutParams params;
+		LinearLayout row;
+		
+		//// controls
+		row = new LinearLayout(ContentHandler.ctx);
+		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		row.setLayoutParams(params);
+		
 		// previous song button
 		psButton = new Button(ContentHandler.ctx);
 		psButton.setText("<<");
@@ -40,7 +48,9 @@ public class MusicController implements OnSeekBarChangeListener {
 				prevSong();
 			}
 		});
-		layout.addView(psButton);
+		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+		psButton.setLayoutParams(params);
+		row.addView(psButton);
 
 		// play/pause button
 		ppButton = new Button(ContentHandler.ctx);
@@ -51,10 +61,9 @@ public class MusicController implements OnSeekBarChangeListener {
 				playpauseButtonPressed();
 			}
 		});
-		params = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 		ppButton.setLayoutParams(params);
-		layout.addView(ppButton);
+		row.addView(ppButton);
 
 		// next song button
 		nsButton = new Button(ContentHandler.ctx);
@@ -65,33 +74,45 @@ public class MusicController implements OnSeekBarChangeListener {
 				nextSong();
 			}
 		});
-		params = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 		nsButton.setLayoutParams(params);
-		layout.addView(nsButton);
+		row.addView(nsButton);
 
+		//// end controls
+		layout.addView(row);
+		
 		// progress bar
 		sProgress = new SeekBar(ContentHandler.ctx);
 		sProgress.setOnSeekBarChangeListener(this);
 		sProgress.setProgress(ContentHandler.songProgress);
 		sProgress.setMax(ContentHandler.songDuration);
-		params = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.setMargins(0, 100, 0, 0);
-		sProgress.setLayoutParams(params);
 		layout.addView(sProgress);
+		
+		// album cover
+		cover = new ImageView(ContentHandler.ctx);
+		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		cover.setLayoutParams(params);
+		cover.setAdjustViewBounds(true);
+		layout.addView(cover);
+	}
+	
+	private void updateCover() {
+		cover.setImageBitmap(ContentHandler.queue.get(ContentHandler.songPosition).getAlbumCover());
 	}
 
 	/*
-	 * Interact with musicplayer
+	 * Interact with music player
 	 */
 	private void nextSong() {
 		ContentHandler.mplayer.playNext();
 		handler.post(progressBarUpdater);
+		updateCover();
 	}
 
 	private void prevSong() {
 		ContentHandler.mplayer.playPrev();
 		handler.post(progressBarUpdater);
+		updateCover();
 	}
 
 	private void playpauseButtonPressed() {
@@ -105,8 +126,11 @@ public class MusicController implements OnSeekBarChangeListener {
 	public void onPlay() {
 		ppButton.setText("Pause");
 
-		// handle progressbar thread
+		// handle progress bar thread
 		handler.postDelayed(progressBarUpdater, 0);
+		
+		// handle cover
+		updateCover();
 	}
 
 	public void onPause() {
