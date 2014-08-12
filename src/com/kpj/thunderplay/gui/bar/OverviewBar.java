@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -30,21 +29,65 @@ public class OverviewBar {
 	private EditText searchBar;
 
 	public void initView(LinearLayout layout) {
-		TableRow.LayoutParams params;
-
 		// container table
-		TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+		TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
 		TableLayout table = new TableLayout(ContentHandler.ctx);
 		table.setLayoutParams(tableParams);
 
 		TableRow row;
+		TableRow.LayoutParams params;
+		params = new TableRow.LayoutParams(
+				TableRow.LayoutParams.MATCH_PARENT, 
+				TableRow.LayoutParams.WRAP_CONTENT, 
+				1.0f);
 
 
 		// first row
 		row = new TableRow(ContentHandler.ctx);
 		row.setLayoutParams(tableParams);
-		row.setGravity(Gravity.CENTER);
+
+		// add all button
+		addList = new Button(ContentHandler.ctx);
+		addList.setLayoutParams(params);
+		addList.setText("Add All");
+		addList.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				for(Long l : ContentHandler.overviewFragment.getSongs()) {
+					ContentHandler.queueFragment.addSong(l);
+				}
+			}
+		});
+		row.addView(addList);
+
+		// search bar
+		searchBar = new EditText(ContentHandler.ctx);
+		searchBar.setLayoutParams(params);
+		searchBar.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {				
+				ContentHandler.overviewFragment.setFilter(s);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {				
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {				
+			}
+		});
+		row.addView(searchBar);
+
+		// finish first row
+		table.addView(row);
+		
+		
+		// second row
+		row = new TableRow(ContentHandler.ctx);
+		row.setLayoutParams(tableParams);
 
 		// label
 		label = new TextView(ContentHandler.ctx);
@@ -53,7 +96,6 @@ public class OverviewBar {
 		label.setTextSize(15);
 		label.setPadding(5, 0, 0, 0);
 
-		params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
 		label.setLayoutParams(params);
 
 		row.addView(label);
@@ -103,52 +145,9 @@ public class OverviewBar {
 
 			}
 		});
-
-		params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+		
 		choices.setLayoutParams(params);
-
 		row.addView(choices);
-
-		// finish first row
-		table.addView(row);
-
-
-		// second row
-		row = new TableRow(ContentHandler.ctx);
-		row.setLayoutParams(tableParams);
-		row.setGravity(Gravity.CENTER);
-
-		// add all button
-		addList = new Button(ContentHandler.ctx);
-		addList.setText("Add All");
-		addList.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				for(Long l : ContentHandler.overviewFragment.getSongs()) {
-					ContentHandler.queueFragment.addSong(l);
-				}
-			}
-		});
-		row.addView(addList);
-
-		// search bar
-		searchBar = new EditText(ContentHandler.ctx);
-		searchBar.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {				
-				ContentHandler.overviewFragment.setFilter(s);
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {				
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {				
-			}
-		});
-		row.addView(searchBar);
 
 		// finish second row
 		table.addView(row);
