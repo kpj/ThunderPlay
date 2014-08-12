@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
-import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.gui.bar.OverviewBar;
 
 
@@ -21,11 +20,11 @@ public class Overview extends Songs {
 	private OverviewBar overviewBar;
 	
 	public Overview() {
-		this(new ArrayList<Song>());
+		this(new ArrayList<Long>());
 		Log.e("FOO", "Weird constructor called");
 	}
 	
-	public Overview(ArrayList<Song> es) {
+	public Overview(ArrayList<Long> es) {
 		super(es);
 		
 		// handle click on list item
@@ -38,9 +37,9 @@ public class Overview extends Songs {
 		});
 		
 		// sort list content
-		sort(new Comparator<Song>() {
-			public int compare(Song a, Song b) {
-				return a.getTitle().compareTo(b.getTitle());
+		sort(new Comparator<Long>() {
+			public int compare(Long a, Long b) {
+				return ContentHandler.allSongs.get(a).getTitle().compareTo(ContentHandler.allSongs.get(b).getTitle());
 			}
 		});
 	}

@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 
-import com.kpj.thunderplay.data.Song;
-
 public class FileHandler {
 	private final static String playlistDir = "playlists"; 
 
@@ -91,7 +89,7 @@ public class FileHandler {
 		return obj;
 	}
 
-	public static void savePlaylist(Context ctx, String name, ArrayList<Song> playlist) {
+	public static void savePlaylist(Context ctx, String name, ArrayList<Long> playlist) {
 		File dir = new File(ctx.getFilesDir(), playlistDir);
 		dir.mkdirs();
 
@@ -100,11 +98,11 @@ public class FileHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static ArrayList<Song> readPlaylist(Context ctx, String name) {
+	public static ArrayList<Long> readPlaylist(Context ctx, String name) {
 		File dir = new File(ctx.getFilesDir(), playlistDir);
 		File fd = new File(dir, name);
 
-		return (ArrayList<Song>) FileHandler.readObject(ctx, fd);
+		return (ArrayList<Long>) FileHandler.readObject(ctx, fd);
 	}
 
 	public static void deletePlaylist(Context ctx, String name) {

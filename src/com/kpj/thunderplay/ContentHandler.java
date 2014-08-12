@@ -3,11 +3,12 @@ package com.kpj.thunderplay;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.LongSparseArray;
 
 import com.kpj.thunderplay.data.Song;
-import com.kpj.thunderplay.gui.Queue;
-import com.kpj.thunderplay.gui.Playlists;
 import com.kpj.thunderplay.gui.Overview;
+import com.kpj.thunderplay.gui.Playlists;
+import com.kpj.thunderplay.gui.Queue;
 import com.kpj.thunderplay.gui.bar.MusicController;
 import com.kpj.thunderplay.music.MusicEqualizer;
 import com.kpj.thunderplay.music.MusicPlayer;
@@ -22,8 +23,10 @@ public class ContentHandler {
 	
 	public final static String queue_filename = "queue.txt";
 	
-	public static ArrayList<Song> queue = new ArrayList<Song>();
-	public static ArrayList<Song> alreadyPlayed = new ArrayList<Song>();
+	public static LongSparseArray<Song> allSongs = new LongSparseArray<Song>();
+	
+	public static ArrayList<Long> queue = new ArrayList<Long>();
+	public static ArrayList<Long> alreadyPlayed = new ArrayList<Long>();
 	public static int songPosition = -1;
 	public static int songProgress = -1;
 	public static int songDuration = -1;

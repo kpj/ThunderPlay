@@ -17,10 +17,10 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.fs.FileHandler;
 import com.kpj.thunderplay.gui.DialogHandler;
 import com.kpj.thunderplay.gui.adapter.TabsPagerAdapter;
+import com.kpj.thunderplay.music.MusicHandler;
 import com.kpj.thunderplay.music.MusicPlayer;
 import com.kpj.thunderplay.music.MusicService;
 import com.kpj.thunderplay.music.MusicService.MusicBinder;
@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		ContentHandler.ctx = this;
 		ContentHandler.mplayer = new MusicPlayer();
 
@@ -47,6 +47,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// setup activity
 		setContentView(R.layout.activity_main);
 		registerForContextMenu(findViewById(R.id.activity_main));
+
+		// load all songs
+		ContentHandler.allSongs = MusicHandler.getAllSongs(ctx);
 
 		// tabbed view
 		setupTabs();
@@ -97,8 +100,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		// files
 		@SuppressWarnings("unchecked")
-		ArrayList<Song> tmp = (ArrayList<Song>) FileHandler.readObject(ctx, ContentHandler.queue_filename);
-		ContentHandler.queue = (tmp!=null)?tmp:new ArrayList<Song>();
+		ArrayList<Long> tmp = (ArrayList<Long>) FileHandler.readObject(ctx, ContentHandler.queue_filename);
+		ContentHandler.queue = (tmp!=null)?tmp:new ArrayList<Long>();
 	}
 
 	private void save_configuration() {

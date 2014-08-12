@@ -16,13 +16,12 @@ import android.widget.LinearLayout;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
-import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.gui.bar.MusicController;
 
 public class Queue extends Songs {
 	private int lastMarkedSongPosition = -1;
 
-	public Queue(ArrayList<Song> es) {
+	public Queue(ArrayList<Long> es) {
 		super(es);
 
 		setListItemOnClickEvent(new OnClickListener() {
@@ -42,7 +41,7 @@ public class Queue extends Songs {
 		if(newPos < 0) newPos = ContentHandler.queue.size() - 1;
 		if(newPos >= ContentHandler.queue.size()) newPos = 0;
 
-		Song tmp = ContentHandler.queue.get(curPos);
+		Long tmp = ContentHandler.queue.get(curPos);
 		ContentHandler.queue.remove(curPos);
 		ContentHandler.queue.add(newPos, tmp);
 

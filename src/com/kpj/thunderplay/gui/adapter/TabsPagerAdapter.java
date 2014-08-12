@@ -20,7 +20,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		ctx = c;		
 
 		// create tab fragments
-		ContentHandler.overviewFragment = new Overview(MusicHandler.getSongList(ctx));
+		ContentHandler.overviewFragment = new Overview(MusicHandler.map2list(ContentHandler.allSongs));
 		ContentHandler.queueFragment = new Queue(ContentHandler.queue);
 		ContentHandler.playlistFragment = new Playlists();
 	}

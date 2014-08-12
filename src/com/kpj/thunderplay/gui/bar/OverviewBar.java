@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
-import com.kpj.thunderplay.data.Song;
 
 public class OverviewBar {
 	private TextView label;
@@ -68,23 +67,23 @@ public class OverviewBar {
 				String selectedItem = parent.getItemAtPosition(pos).toString();
 				switch(selectedItem) {
 				case "Title":
-					ContentHandler.overviewFragment.sort(new Comparator<Song>() {
-						public int compare(Song a, Song b) {
-							return a.getTitle().compareTo(b.getTitle());
+					ContentHandler.overviewFragment.sort(new Comparator<Long>() {
+						public int compare(Long a, Long b) {
+							return ContentHandler.allSongs.get(a).getTitle().compareTo(ContentHandler.allSongs.get(b).getTitle());
 						}
 					});
 					break;
 				case "Artist":
-					ContentHandler.overviewFragment.sort(new Comparator<Song>() {
-						public int compare(Song a, Song b) {
-							return a.getArtist().compareTo(b.getArtist());
+					ContentHandler.overviewFragment.sort(new Comparator<Long>() {
+						public int compare(Long a, Long b) {
+							return ContentHandler.allSongs.get(a).getArtist().compareTo(ContentHandler.allSongs.get(b).getArtist());
 						}
 					});
 					break;
 				case "Album":
-					ContentHandler.overviewFragment.sort(new Comparator<Song>() {
-						public int compare(Song a, Song b) {
-							return a.getAlbum().compareTo(b.getAlbum());
+					ContentHandler.overviewFragment.sort(new Comparator<Long>() {
+						public int compare(Long a, Long b) {
+							return ContentHandler.allSongs.get(a).getAlbum().compareTo(ContentHandler.allSongs.get(b).getAlbum());
 						}
 					});
 					break;

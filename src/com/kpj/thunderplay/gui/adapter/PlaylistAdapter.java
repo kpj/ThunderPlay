@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
-import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.fs.FileHandler;
 
 public class PlaylistAdapter extends BaseAdapter {
@@ -57,7 +56,7 @@ public class PlaylistAdapter extends BaseAdapter {
 				String plname = ContentHandler.playlists.get(ind);
 
 				ContentHandler.queueFragment.clear();
-				for(Song s : FileHandler.readPlaylist(ContentHandler.ctx, plname)) {
+				for(Long s : FileHandler.readPlaylist(ContentHandler.ctx, plname)) {
 					ContentHandler.queueFragment.addSong(s);
 				}
 			}

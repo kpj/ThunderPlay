@@ -55,7 +55,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 	public void playSong() {
 		player.reset();
 
-		Song playSong = ContentHandler.queue.get(ContentHandler.songPosition);
+		Song playSong = ContentHandler.allSongs.get(ContentHandler.queue.get(ContentHandler.songPosition));
 		currentSongTitle = playSong.getTitle();
 
 		Uri trackUri = ContentUris.withAppendedId(
@@ -128,7 +128,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 				ContentHandler.alreadyPlayed.clear();
 
 			int newSong = ContentHandler.songPosition;
-			Song cur = null;
+			Long cur = null;
 			if(newSong != -1)
 				cur = ContentHandler.queue.get(newSong);
 

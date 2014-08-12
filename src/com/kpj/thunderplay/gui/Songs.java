@@ -15,25 +15,24 @@ import android.widget.ListView;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
-import com.kpj.thunderplay.data.Song;
 import com.kpj.thunderplay.gui.adapter.SonglistAdapter;
 
 public abstract class Songs extends Fragment {
-	protected ArrayList<Song> elements;
+	protected ArrayList<Long> elements;
 	protected SonglistAdapter adapter;
 
 	private OnClickListener itemOnClickListener;
 
-	public Songs(ArrayList<Song> es) {
+	public Songs(ArrayList<Long> es) {
 		elements = es;
 	}
 
-	public void addSong(Song s) {
+	public void addSong(Long s) {
 		elements.add(s);
 		update();
 	}
 
-	public void setList(ArrayList<Song> sl) {
+	public void setList(ArrayList<Long> sl) {
 		elements = sl;
 		update();
 	}
@@ -53,7 +52,7 @@ public abstract class Songs extends Fragment {
 		update();
 	}
 
-	public void sort(Comparator<Song> comp) {
+	public void sort(Comparator<Long> comp) {
 		Collections.sort(elements, comp);
 		update();
 	}
@@ -63,7 +62,7 @@ public abstract class Songs extends Fragment {
 		update();
 	}
 
-	public Song getSongAt(int pos) {
+	public Long getSongAt(int pos) {
 		return elements.get(pos);
 	}
 

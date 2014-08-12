@@ -97,7 +97,7 @@ public class MusicController implements OnSeekBarChangeListener {
 	}
 	
 	private void updateCover() {
-		cover.setImageBitmap(ContentHandler.queue.get(ContentHandler.songPosition).getAlbumCover());
+		cover.setImageBitmap(ContentHandler.allSongs.get(ContentHandler.queue.get(ContentHandler.songPosition)).getAlbumCover());
 	}
 
 	/*

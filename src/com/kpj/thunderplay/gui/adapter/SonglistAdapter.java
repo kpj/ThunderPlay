@@ -10,16 +10,17 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
 import com.kpj.thunderplay.data.Song;
 
 public class SonglistAdapter extends BaseAdapter {
-	private ArrayList<Song> elements;
+	private ArrayList<Long> elements;
 	private LayoutInflater inflater;
 
 	private OnClickListener onClickListener = null;
 
-	public SonglistAdapter(LayoutInflater infl, ArrayList<Song> es) {
+	public SonglistAdapter(LayoutInflater infl, ArrayList<Long> es) {
 		elements = es;
 		inflater = infl;
 	}
@@ -40,7 +41,7 @@ public class SonglistAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int i) {
-		return elements.get(i).getId();
+		return ContentHandler.allSongs.get(elements.get(i)).getId();
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class SonglistAdapter extends BaseAdapter {
 		TextView artistView = (TextView) layer.findViewById(R.id.song_artist);
 		TextView albumView = (TextView) layer.findViewById(R.id.song_album);
 
-		Song currSong = elements.get(position);
+		Song currSong = ContentHandler.allSongs.get(elements.get(position));
 
 		songView.setText(currSong.getTitle());
 		artistView.setText(currSong.getArtist());

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.util.LongSparseArray;
 
 import com.kpj.thunderplay.ContentHandler;
 import com.kpj.thunderplay.R;
@@ -58,6 +59,25 @@ public class MusicHandler {
 
 		musicCursor.close();
 		return songList;
+	}
+	
+	public static LongSparseArray<Song> getAllSongs(Context c) {
+		ArrayList<Song> tmp = getSongList(c);
+		LongSparseArray<Song> res = new LongSparseArray<Song>();
+		
+		for(Song s : tmp) {
+			res.put(s.getId(), s);
+		}
+		
+		return res;
+	}
+	
+	public static ArrayList<Long> map2list(LongSparseArray<Song> foo) {
+		ArrayList<Long> tmp = new ArrayList<Long>();
+		for(int i = 0 ; i < foo.size() ; i++) {
+			tmp.add(foo.keyAt(i));
+		}
+		return tmp;
 	}
 
 	public static Bitmap getAlbumart(String path) {
