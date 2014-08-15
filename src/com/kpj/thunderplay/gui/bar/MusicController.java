@@ -1,5 +1,6 @@
 package com.kpj.thunderplay.gui.bar;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -96,9 +97,20 @@ public class MusicController implements OnSeekBarChangeListener {
 		layout.addView(cover);
 	}
 	
+	/*
+	 * Handle async cover loading
+	 */
+	
 	private void updateCover() {
-		cover.setImageBitmap(ContentHandler.allSongs.get(ContentHandler.queue.get(ContentHandler.songPosition)).getAlbumCover());
+		((Activity) ContentHandler.ctx).runOnUiThread(new CoverLoader());
 	}
+	
+	private class CoverLoader implements Runnable {
+        @Override
+        public void run() {
+        	cover.setImageBitmap(ContentHandler.allSongs.get(ContentHandler.queue.get(ContentHandler.songPosition)).getAlbumCover());
+        }
+    }
 
 	/*
 	 * Interact with music player
